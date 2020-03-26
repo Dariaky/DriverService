@@ -1,59 +1,60 @@
 const express = require('express');
 const router = express.Router();
 
+const Driver = require('../../models/Driver.model');
+const Shipper = require('../../models/Shipper.model');
+
 const authorizationService = require('../../service/auth.service');
 
 // const bcrypt = require('bcrypt');
 
 
 router
-  .post('/', (req, res) => {
-
-    // MOCKUP AS FOR NOW
-      const user = {
-        name : 'DD',   // let username = req.body.username;
-        pass: '123'  // let password = req.body.password;
-      };
-      let usernameFromBD = 'DD';
-      let passwordFromBD = '123';
-
-
-        if (user.name && user.pass) {
-        if (user.name === usernameFromBD && user.pass === passwordFromBD) {
-
-          // Creating jwt token
-          authorizationService.createToken(user, { expiresIn: '24h'}, (err, jwt_token) => {
-            if (err) {
-              return res.send(401).json({
-                success: false,
-                message: 'Impossible to receive a token',
-              });
-              // console.log('Impossible to receive a token:', err)
+    .post('/', async (req, res) => {
+      switch (req.body.role) {
+        case 'driver': {
+          try {
+            const driver = await Driver.findOne({
+              email: req.body.email,
+              password: req.body.password,
+            });
+            if (driver) {
+              // Creating jwt token
+              const jwtToken = await authorizationService.createToken(driver, {});
+              res.status(200).json({jwtToken});
             } else {
-              // return the JWT token for the future API calls
-              return res.json({
-                success: true,
-                message: 'Authentication successful!',
-                token: jwt_token
+              return res.status(403).json({
+                message: 'Incorrect username or password',
               });
             }
-          } );
-
-        } else {
-          return res.send(403).json({
-            success: false,
-            message: 'Incorrect username or password'
-          });
+          } catch (err) {
+            res.status(500).json({status: err.message});
+          }
+          break;
         }
-      } else {
-          return res.send(400).json({
-          success: false,
-          message: 'Authentication failed! Please check the request'
-        });
+        case 'shipper': {
+          try {
+            const shipper = await Shipper.findOne({
+              email: req.body.email,
+              password: req.body.password,
+            });
+            if (shipper) {
+              // Creating jwt token
+              const jwtToken = await authorizationService.createToken(shipper, {});
+              res.status(200).json({jwtToken});
+            } else {
+              return res.status(403).json({
+                message: 'Incorrect username or password',
+              });
+            }
+          } catch (err) {
+            res.status(500).json({status: err.message});
+          }
+          break;
+        }
       }
-  }
-
-  );
+    }
+    );
 
 
 module.exports = router;

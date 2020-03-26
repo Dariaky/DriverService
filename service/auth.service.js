@@ -1,15 +1,14 @@
 const jwt = require('jsonwebtoken');
-const { privateKey } = require('../config/auth');
+const privateKey = require('../config/auth').secret;
 
 
 class AuthorizationService {
-
-  createToken(user, settings, callback) {
-    return jwt.sign(JSON.stringify(user), privateKey, settings, callback);
+  async createToken(user, settings) {
+    return await jwt.sign(JSON.stringify(user), privateKey, settings);
   }
 
-  verifyToken(token, callback) {
-    return jwt.verify(token, privateKey, callback);
+  async verifyToken(token) {
+    return await jwt.verify(token, privateKey);
   }
 }
 
