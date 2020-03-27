@@ -4,7 +4,7 @@ const router = express.Router();
 // const Driver = require('../../models/Driver.model');
 // const Shipper = require('../../models/Shipper.model');
 
-
+//   /profile
 router
     .get('/', (req, res) => {
       res.send('Hello from profile');

@@ -21,7 +21,10 @@ router
             if (driver) {
               // Creating jwt token
               const jwtToken = await authorizationService.createToken(driver, {});
-              res.status(200).json({jwtToken});
+              res.status(200).json({
+                jwtToken,
+                driver,
+              });
             } else {
               return res.status(403).json({
                 message: 'Incorrect username or password',
@@ -41,7 +44,10 @@ router
             if (shipper) {
               // Creating jwt token
               const jwtToken = await authorizationService.createToken(shipper, {});
-              res.status(200).json({jwtToken});
+              res.status(200).json({
+                jwtToken,
+                shipper,
+              });
             } else {
               return res.status(403).json({
                 message: 'Incorrect username or password',
