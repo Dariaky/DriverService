@@ -1,15 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('config');
 
 const Shipper = require('./models/Shipper.model');
 const Driver = require('./models/Driver.model');
 const authorized = require('./routes/middleware/auth');
 
 app = express();
-const port = process.env.port || 8081;
+const PORT = config.get('port') || 8081;
+// const port = process.env.port || 8081;
 
-mongoose.connect('mongodb://localhost/driverAppDB');
+
+mongoose.connect(config.get('mongoUri'));
 const db = mongoose.connection;
 
 // Check connection
@@ -27,23 +30,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 // the same as express.json() - parsing JSON bodies sent by API clients
 
-// Import Routes
-const login = require('./routes/api/login');
-const registration = require('./routes/api/registration');
-const profile = require('./routes/api/profile');
-
 
 // Routes
 app.get('/', (req, res) => {
   return res.send('Hello');
 });
 
-app.use('/registration', registration);
-app.use('/login', login);
+app.use('/registration', require('./routes/api/registration'));
+app.use('/login', require('./routes/api/login'));
 
 app.use(authorized);
 
-app.use('/profile', profile);
+app.use('/profile', require('./routes/api/profile'));
 
 // Find all users:
 app.get('/drivers', (req, res) => {
@@ -130,11 +128,11 @@ app.use('*', (req, res) => {
 });
 
 // Start Server
-app.listen(port, (error) => {
+app.listen(PORT, (error) => {
   if (error) {
     console.log('Cannot start servers:', error);
   }
-  console.log(`Server is listening on port ${port}...`);
+  console.log(`Server is listening on port ${PORT}...`);
 });
 
 
