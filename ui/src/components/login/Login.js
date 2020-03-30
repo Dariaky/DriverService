@@ -34,7 +34,8 @@ const Login = props => {
 
     try {
       const data = await request('/login', 'POST', {...form});
-      // console.log('DATA: ', data)
+      // console.log('DATA: ', data.jtwToken, data.userId, data.userName);
+
       authorization.login(data.jwtToken, data.userId)
     } catch(e) {
 

@@ -5,12 +5,15 @@ const config = require('config');
 
 const Shipper = require('./models/Shipper.model');
 const Driver = require('./models/Driver.model');
+
+const registration = require('./routes/api/registration');
+const login = require('./routes/api/login');
 const authorized = require('./routes/middleware/auth');
+const profile = require('./routes/api/profile');
 
 app = express();
 const PORT = config.get('port') || 8081;
 // const port = process.env.port || 8081;
-
 
 mongoose.connect(config.get('mongoUri'));
 const db = mongoose.connection;
@@ -36,12 +39,10 @@ app.get('/', (req, res) => {
   return res.send('Hello');
 });
 
-app.use('/registration', require('./routes/api/registration'));
-app.use('/login', require('./routes/api/login'));
-
+app.use('/registration', registration);
+app.use('/login', login);
 app.use(authorized);
-
-app.use('/profile', require('./routes/api/profile'));
+app.use('/profile', profile);
 
 // Find all users:
 app.get('/drivers', (req, res) => {
@@ -54,7 +55,6 @@ app.get('/drivers', (req, res) => {
         }
       });
 });
-
 app.get('/shippers', (req, res) => {
   Shipper.find({})
       .exec((err, users) => {

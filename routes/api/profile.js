@@ -7,7 +7,8 @@ const router = express.Router();
 //   /profile
 router
     .get('/', (req, res) => {
-      res.send('Hello from profile');
+      console.log(req.token);
+      res.status(200).json({status: 'It is working'});
     });
 
 
