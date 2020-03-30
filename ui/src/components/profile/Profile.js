@@ -16,12 +16,13 @@ const Profile = props => {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
 
-        const data = await request('/profile', 'GET', null, {
+        const user = await request(`/profile/${storeData.userId}`, 'GET', null, {
           'Content-Type': 'application/json',
-          'Authorization': storeData.token
+          'Authorization': storeData.token,
+          'Role': storeData.role,
         });
 
-        console.log("DATA from login: ", data);
+        console.log("DATA from login: ", user);
 
       } catch(e) {
 

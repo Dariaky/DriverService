@@ -50,7 +50,7 @@ router
             res.status(200).json({
               jwtToken,
               userId: driver.id,
-              userName: driver.name
+              role: driver.role,
             });
 
           } catch (err) {
@@ -79,6 +79,7 @@ router
               jwtToken,
               userId: shipper.id,
               userName: shipper.name,
+              role: shipper.role,
             });
 
           } catch (err) {

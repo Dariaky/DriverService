@@ -8,14 +8,15 @@ import Login from './components/login/Login';
 import Registration from './components/registration/Registration';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
+import ChangePassword from './components/ChangePassword';
 
 
-const useRoutes = isAuthenticated => {
+const useRoutes = (isAuthenticated, userId, role) => {
 
   if(!isAuthenticated) {
     return (
       <React.Fragment>
-        <Header isAuthenticated={isAuthenticated}/>
+        <Header isAuthenticated={isAuthenticated} userId={userId} role={role}/>
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
@@ -28,11 +29,11 @@ const useRoutes = isAuthenticated => {
   }
   return (
     <React.Fragment>
-      <Header isAuthenticated={isAuthenticated}/>
+      <Header isAuthenticated={isAuthenticated} userId={userId} role={role}/>
       <Switch>
-        <Route path="/profile" exact component={Profile} />
+        <Route path={`/profile/${userId}`} exact component={Profile}/>
+        <Route path={`/profile/${userId}/change-password`} exact component={ChangePassword}/>
         <Route path="/" exact component={Main} />
-        <Redirect to="/profile" />
       </Switch>
       <Footer/>
     </React.Fragment>

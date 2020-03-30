@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
+import { useHistory } from 'react-router-dom';
 import { useHttp } from '../../hooks/http.hook';
 import { useMessage } from '../../hooks/message.hook';
 import PropTypes from 'prop-types';
@@ -7,6 +8,7 @@ import './login.css'
 import {LoginContext} from '../../context/LoginContext';
 
 const Login = props => {
+  const history = useHistory();
   const authorization = useContext(LoginContext);
   const message = useMessage();
   const {loading, request, error, clearError} = useHttp();
@@ -34,11 +36,11 @@ const Login = props => {
 
     try {
       const data = await request('/login', 'POST', {...form});
-      // console.log('DATA: ', data.jtwToken, data.userId, data.userName);
 
-      authorization.login(data.jwtToken, data.userId)
+      authorization.login(data.jwtToken, data.userId, data.role);
+      history.push(`/profile/${data.userId}`);
     } catch(e) {
-
+        console.log('Data was not received', e)
     }
   };
 
