@@ -19,6 +19,8 @@ router
       ],
       async (req, res) => {
 
+        console.log("Body: ", req.body);
+
       const errors = validationResult(req);
       if(!errors.isEmpty()) {
         return res.status(400).json({
@@ -49,7 +51,7 @@ router
               .createToken(driver, {});
             res.status(200).json({
               jwtToken,
-              driver,
+              userId: driver.id,
             });
 
           } catch (err) {
@@ -76,7 +78,7 @@ router
               .createToken(shipper, {});
             res.status(200).json({
               jwtToken,
-              shipper,
+              userId: shipper.id,
             });
 
           } catch (err) {

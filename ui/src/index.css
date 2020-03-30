@@ -22,3 +22,7 @@ ul {
 a {
     text-decoration: none;
 }
+
+.section__title {
+    padding-bottom: 2%;
+}

@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "lint": "eslint ."
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "lint": "eslint .",
+    "client": "npm run start --prefix ui",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +22,7 @@
     "mongoose": "^5.9.6"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "eslint-config-google": "^0.14.0"
   }
 }

@@ -1,31 +1,53 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-
+import React, {useState, useEffect, useContext} from 'react';
+import { useHttp } from '../../hooks/http.hook';
+import { useMessage } from '../../hooks/message.hook';
 import PropTypes from 'prop-types';
 
 import './login.css'
+import {LoginContext} from '../../context/LoginContext';
 
 const Login = props => {
-  const {register, handleSubmit, errors} = useForm();
+  const authorization = useContext(LoginContext);
+  const message = useMessage();
+  const {loading, request, error, clearError} = useHttp();
 
-  const onSubmit = (loginInfo) => {
-    console.log(loginInfo);
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    role: 'driver'
+  });
+
+  useEffect(() => {
+      message(error);
+      clearError();
+  }, [error, message, clearError]);
+
+  const changeHandler = (event) => {
+    setForm({
+      ...form,
+      [event.target.name]: event.target.value
+    })
   };
 
-  // const handleSubmit = e => {
-  //   e.preventDefault()
-  //   fetch(`https://hooks.zapier.com/hooks/catch/1239764/oo73gyz/`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({ email, comment, key: feature }),
-  //   }).then(() => setIsSent(true))
-  // }
+  const loginHandler = async (e) => {
+    e.preventDefault();
 
+    try {
+      const data = await request('/login', 'POST', {...form});
+      // console.log('DATA: ', data)
+      authorization.login(data.jwtToken, data.userId)
+    } catch(e) {
+
+    }
+  };
 
 
   return (
     <div className="login">
       <h1 className="section__title">Sign In</h1>
-      <form method="POST" className="form login__form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={loginHandler}
+        className="form login__form">
         <div className="form__container">
           <label htmlFor="user-email" className="form__label">Email</label>
           <input
@@ -34,34 +56,42 @@ const Login = props => {
             name="email"
             placeholder="john@gmail.com"
             className="form__input"
-            ref={register({required: true})}
+            onChange={changeHandler}
           />
         </div>
         <div className="form__container">
           <label htmlFor="user-password"
                  className="form__label">Password</label>
           <input
+            type="password"
             id="user-password"
             name="password"
             className="form__input"
-            ref={register({required: true, minLength: 3})}
+            onChange={changeHandler}
           />
+          <p>{error}</p>
         </div>
-        {errors.password && <p>Password in invalid</p>}
         <div className="form__container">
           <label htmlFor="user-password"
                  className="form__label">Role</label>
           <select
-            ref={register}
             id="user-role"
             name="role"
-            className="form__input">
-            <option>Driver</option>
-            <option>Shipper</option>
+            className="form__input"
+            onChange={changeHandler}
+          >
+            <option>driver</option>
+            <option>shipper</option>
           </select>
         </div>
         <div className="form__container">
-          <button type="submit" className="form__submit-button">Sign In</button>
+          <button
+            type="submit"
+            className="form__submit-button"
+            disabled={loading}
+          >
+            Sign In
+          </button>
         </div>
       </form>
     </div>

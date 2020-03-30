@@ -27,7 +27,7 @@ db.on('error', (err) => {
 // PARSERS:
 app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.urlencoded()) - parsing URL-encoded bodies
-app.use(bodyParser.json());
+app.use(bodyParser.json( {extended: true }));
 // the same as express.json() - parsing JSON bodies sent by API clients
 
 

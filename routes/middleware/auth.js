@@ -4,7 +4,7 @@ const verifyToken = (req, res, next) => {
   // 1. GET TOKEN FROM REQ
   const jwtToken = req.body.token;
   // const userId = req.body.id;
-
+  console.log('Token in middleware: ', jwtToken);
   if (jwtToken) {
     authorizationService.verifyToken(jwtToken);
 
@@ -12,8 +12,7 @@ const verifyToken = (req, res, next) => {
     // req.userId = userId; // writing id into request
     next();
   } else {
-    return res.json({
-      success: false,
+    return res.status(400).json({
       message: 'Authorization token is not supplied',
     });
   }
