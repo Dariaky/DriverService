@@ -1,8 +1,10 @@
-import React, {useEffect, useCallback} from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useCallback, useState} from 'react';
 import {useHttp} from '../../hooks/http.hook';
 
-import './profile.css'
+import PropTypes from 'prop-types';
+
+import ShipperProfile from './ShipperProfile/ShipperProfile';
+import DriverProfile from './DriverProfile/DriverProfile';
 
 
 const Profile = props => {
@@ -10,6 +12,14 @@ const Profile = props => {
   const { request } = useHttp();
 
   const storageName = 'userData';
+
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    role: '',
+  });
+
 
   useEffect( useCallback(() => {
     async function fetchData() {
@@ -22,32 +32,27 @@ const Profile = props => {
           'Role': storeData.role,
         });
 
-        console.log("DATA from login: ", user);
+        setUser({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        })
 
       } catch(e) {
-
+        console.log('Something went wrong', e);
       }
     }
     fetchData();
   }), []);
 
 
+
+
   return (
     <section>
-      <h1 className="section__title">Notes</h1>
-      <div>
-        <form>
-          <input name="notename" />
-            <button>Your truck</button>
-        </form>
-        <ul className="notes__list">
-          <li className="notes__item">Truck 1 <button>Delete</button></li>
-          <li className="notes__item">Truck 2 <button>Delete</button></li>
-          <li className="notes__item">Truck 3 <button>Delete</button></li>
-          <li className="notes__item">Truck 4 <button>Delete</button></li>
-          <li className="notes__item">Truck 5 <button>Delete</button></li>
-        </ul>
-      </div>
+      <h1>Welcome {user.name}!</h1>
+      {user.role === 'driver' ? <DriverProfile/> : <ShipperProfile/>}
     </section>
   );
 };

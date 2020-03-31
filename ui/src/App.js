@@ -1,20 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
 
-import useRoutes from './routes';
 import {useLogin} from './hooks/login.hook';
+
 import {LoginContext} from './context/LoginContext';
+import useRoutes from './routes';
 
 
 function App() {
-  const {token, login, logout, userId, role} = useLogin();
+  const {token, login, logout, userId, userRole} = useLogin();
 
-  const isAuthenticated = !!token; // true false
+  const isAuthenticated = !!token;
 
-  const routes = useRoutes(isAuthenticated, userId, role);
+  const routes = useRoutes(isAuthenticated, userId, userRole);
   return (
     <LoginContext.Provider value={{
-      token, login, logout, userId, role
+      token, login, logout, userId, userRole
     }}>
       <Router>
         <div className="App">

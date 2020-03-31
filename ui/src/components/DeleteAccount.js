@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {useHttp} from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
+import {LoginContext} from '../context/LoginContext';
 
-import PropTypes from 'prop-types';
-
-const ChangePassword = props => {
+const DeleteAccount = props => {
 
   const history = useHistory();
   const storageName = 'userData';
   const {request, error, clearError} = useHttp();
   const message = useMessage();
+  const authorization = useContext(LoginContext);
 
   const [form, setForm] = useState({
-    oldPassword: '',
-    newPassword: '',
+    email: '',
   });
 
 
@@ -24,23 +24,21 @@ const ChangePassword = props => {
   }, [error, message, clearError]);
 
 
-
-  const changePasswordHandler = async (e) => {
+  const deleteHandler = async (e) => {
     e.preventDefault();
 
     try {
       const storeData = JSON.parse(localStorage.getItem(storageName));
 
-      await request(`/profile/${storeData.userId}/change-password`, 'PUT', {...form, role: storeData.role}, {
+      await request(`/profile/${storeData.userId}/delete-account`, 'DELETE', {...form, role: storeData.role}, {
         'Content-Type': 'application/json',
         'Authorization': storeData.token
       });
-
-      console.log("Password was changed!");
-      history.push(`/profile/${storeData.userId}`);
-
+      console.log('User was deleted! Bye Bye!');
+      authorization.logout();
+      history.push('/registration');
     } catch(e) {
-      console.log('Password was not changed', e)
+      console.log('Something went wrong. Account wasn\'t deleted', e)
     }
   };
 
@@ -54,27 +52,18 @@ const ChangePassword = props => {
 
   return (
     <div className="login">
-      <h1 className="section__title">Change Password</h1>
+      <h1 className="section__title">Are you sure you want to delete your account?</h1>
       <form
-        onSubmit={changePasswordHandler}
+        onSubmit={deleteHandler}
         className="form login__form">
+
         <div className="form__container">
-          <label htmlFor="user-old-password" className="form__label">Old Password</label>
+          <label htmlFor="user-email"
+                 className="form__label">Email</label>
           <input
-            id="user-old-password"
-            type="password"
-            name="oldPassword"
-            className="form__input"
-            onChange={changeHandler}
-          />
-        </div>
-        <div className="form__container">
-          <label htmlFor="user-new-password"
-                 className="form__label">New Password</label>
-          <input
-            type="password"
-            id="user-new-password"
-            name="newPassword"
+            type="text"
+            id="user-email"
+            name="email"
             className="form__input"
             onChange={changeHandler}
           />
@@ -85,7 +74,7 @@ const ChangePassword = props => {
             type="submit"
             className="form__submit-button"
           >
-            Sign In
+            No way back
           </button>
         </div>
       </form>
@@ -93,8 +82,9 @@ const ChangePassword = props => {
   );
 };
 
-ChangePassword.propTypes = {
+
+DeleteAccount.propTypes = {
 
 };
 
-export default ChangePassword;
+export default DeleteAccount;

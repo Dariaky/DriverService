@@ -9,14 +9,15 @@ import Registration from './components/registration/Registration';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import ChangePassword from './components/ChangePassword';
+import DeleteAccount from './components/DeleteAccount';
 
 
-const useRoutes = (isAuthenticated, userId, role) => {
+const useRoutes = (isAuthenticated, userId, userRole) => {
 
   if(!isAuthenticated) {
     return (
       <React.Fragment>
-        <Header isAuthenticated={isAuthenticated} userId={userId} role={role}/>
+        <Header isAuthenticated={isAuthenticated} userId={userId} userRole={userRole}/>
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
@@ -29,10 +30,11 @@ const useRoutes = (isAuthenticated, userId, role) => {
   }
   return (
     <React.Fragment>
-      <Header isAuthenticated={isAuthenticated} userId={userId} role={role}/>
+      <Header isAuthenticated={isAuthenticated} userId={userId} userRole={userRole}/>
       <Switch>
-        <Route path={`/profile/${userId}`} exact component={Profile}/>
+        <Route path={`/profile/${userId}`} exact component={Profile} />}/>
         <Route path={`/profile/${userId}/change-password`} exact component={ChangePassword}/>
+        <Route path={`/profile/${userId}/delete-account`} exact component={DeleteAccount}/>
         <Route path="/" exact component={Main} />
       </Switch>
       <Footer/>

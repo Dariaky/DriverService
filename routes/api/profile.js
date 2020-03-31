@@ -42,24 +42,36 @@ router
       const hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
       try {
         if (req.body.role === 'driver') {
-            const updatedDriver = await Driver.findOneAndUpdate(
+            await Driver.findOneAndUpdate(
               {_id: req.params.id},
               {password: hashedPassword},
               {new: true}
               );
-        return res.json({updatedDriver});
+        return res.json({status: 'Password was changed!'});
         } else {
-          const updatedShipper = await Shipper.findOneAndUpdate(
+          await Shipper.findOneAndUpdate(
             {_id: req.params.id},
             {password: hashedPassword},
             {new: true}
           );
-          return res.json({updatedShipper});
+          return res.json({status: 'Password was changed!'});
         }
 
       } catch (e) {
         res.status(500).json({status: e.message})
       }
+  })
+
+  .delete('/:id/delete-account', async (req, res) => {
+      try {
+      await Shipper.findOneAndRemove({
+      _id: req.params.id,
+      email: req.body.email
+    });
+    res.status(200).json({status: "User was deleted!"})
+  } catch (err) {
+    res.status(401).json({status: err.message});
+  }
   });
 
 

@@ -63,7 +63,7 @@ router
             });
 
             await shipper.save();
-            res.status(201).json({message: 'Shipper was created'});
+            res.status(201).json({message: 'ShipperProfile was created'});
           } catch (err) {
             res.status(500).json({message: err.message});
           }

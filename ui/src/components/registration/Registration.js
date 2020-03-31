@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useHttp } from '../../hooks/http.hook';
 import { useMessage } from '../../hooks/message.hook';
 import PropTypes from 'prop-types';
 import './registration.css'
 
 const Registration = props => {
-
+  const history = useHistory();
   const message = useMessage();
   const {request, error, clearError} = useHttp();
 
@@ -34,6 +35,7 @@ const Registration = props => {
     try {
       const data = await request('/registration', 'POST', {...form});
       console.log(data);
+      history.push('/login');
     } catch(e) {
 
     }
