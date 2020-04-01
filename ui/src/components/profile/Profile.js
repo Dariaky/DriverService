@@ -51,8 +51,8 @@ const Profile = props => {
 
   return (
     <section>
-      <h1>Welcome {user.name}!</h1>
-      {user.role === 'driver' ? <DriverProfile/> : <ShipperProfile/>}
+      {/*<h1>Welcome {user.name}!</h1>*/}
+      {user.role === 'driver' ? <DriverProfile user={user}/> : <ShipperProfile user={user}/>}
     </section>
   );
 };

@@ -6,7 +6,7 @@ const ShipperSchema = new Schema({
   email: {type: String, required: true, unicode: true},
   password: {type: String, required: true},
   role: {type: String, required: true},
-  loads: [{type: Types.ObjectId, ref: 'Load'}],
+  // loads: [{type: Types.ObjectId, ref: 'Load'}],
 });
 
 

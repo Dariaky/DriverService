@@ -7,6 +7,7 @@ const authorized = require('./routes/middleware/auth');
 const registration = require('./routes/api/registration');
 const login = require('./routes/api/login');
 const profile = require('./routes/api/profile');
+const load = require('./routes/api/load');
 
 app = express();
 const PORT = config.get('port') || 8081;
@@ -25,18 +26,19 @@ db.on('error', (err) => {
 
 // Parsers:
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json( {extended: true }));
+app.use(bodyParser.json( {extended: true}));
 
 
 // Routes:
 app.get('/', (req, res) => {
-  return res.status(200).json({status: 'OK!'})
+  return res.status(200).json({status: 'OK!'});
 });
 
 app.use('/registration', registration);
 app.use('/login', login);
 app.use(authorized);
 app.use('/profile', profile);
+app.use('/loads', load);
 
 
 app.use('*', (req, res) => {
