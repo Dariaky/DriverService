@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {useHttp} from '../../../../../hooks/http.hook';
 import {useMessage} from '../../../../../hooks/message.hook';
+import EditLoad from '../../EditLoad/EditLoad';
 
 const NewLoadItemFull = props => {
 
@@ -13,8 +14,9 @@ const NewLoadItemFull = props => {
   const {request, error, clearError} = useHttp();
   const message = useMessage();
 
+  const [editForm, setEditForm] = useState(false);
+
   const [newLoad, setLoad] = useState({
-    id: '',
     title: '',
     width: 0,
     length: 0,
@@ -30,10 +32,12 @@ const NewLoadItemFull = props => {
 
   const postLoadItemHandler = async () => {
 
-    await request(`${pathname}`, 'PUT', null, {
+    const awayt = await request(`${pathname}`, 'PATCH', null, {
       'Content-Type': 'application/json',
       'Authorization': storeData.token
     });
+
+    console.log(awayt);
 
   };
 
@@ -48,13 +52,21 @@ const NewLoadItemFull = props => {
 
   };
 
-  const editLoadItemHandler = async () => {
+  const editLoadItemHandler = () => {
+    setEditForm(!editForm);
+  };
 
-    await request(`${pathname}`, 'PATCH', null, {
-      'Content-Type': 'application/json',
-      'Authorization': storeData.token
+  const onEditedLoad = (editedLoad) => {
+
+    setLoad({
+      ...newLoad,
+      title: editedLoad.editedLoad.title,
+      width: editedLoad.editedLoad.dimensions.width,
+      length: editedLoad.editedLoad.dimensions.length,
+      height: editedLoad.editedLoad.dimensions.height,
+      payload: editedLoad.editedLoad.payload,
     });
-
+    setEditForm(false);
 
   };
 
@@ -69,13 +81,13 @@ const NewLoadItemFull = props => {
 
         setLoad({
           ...newLoad,
-          id: receiveLoad.load._id,
           title: receiveLoad.load.title,
           width: receiveLoad.load.dimensions.width,
           length: receiveLoad.load.dimensions.length,
           height: receiveLoad.load.dimensions.height,
           payload: receiveLoad.load.payload,
         });
+
 
       } catch(e) {
         console.log('Load was not received', e)
@@ -100,6 +112,8 @@ const NewLoadItemFull = props => {
       <button onClick={editLoadItemHandler}>Edit</button>
       <button onClick={deleteLoadItemHandler}>Delete</button>
       <button onClick={postLoadItemHandler}>Post</button>
+
+      { editForm ? <EditLoad onEditedLoad={onEditedLoad} {...newLoad}/> : ''}
     </div>
   );
 };

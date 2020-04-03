@@ -33,7 +33,7 @@ router
           title: req.body.title,
           createdBy: req.body.userId,
           assignedTo: '',
-          logs: [{message: 'Created', time: '2'}], // might be a problem with time type in model
+          logs: [{message: 'Load created', time: new Date().getTime().toString()}], // might be a problem with time type in model
           status: 'NEW',
           state: '',
           dimensions: {
@@ -77,33 +77,47 @@ router
     })
 
 
-  // .put('/:id/update-load', async (req, res) => { // here we receive updated params about load
-  //   // updating in Load DB
-  //   // updating Shipper loads array
-  //     try {
-  //
-  //     } catch (e) {
-  //       res.status(500).json({status: e.message});
-  //     }
-  //   })
-    .delete('/:id/delete-load', async (req, res) => { // removing by id from Load DB and from Shippers Array
-      try {
+    .put('/:id', async (req, res) => { // here we receive updated params about load
+        try {
+          const editedLoad = await Load.findOneAndUpdate(
+            {_id: req.params.id},
+            {
+              title: req.body.title,
+              dimensions: {
+                width: req.body.width,
+                length: req.body.length,
+                height: req.body.height
+              },
+              payload: req.body.payload
+            },
+            {new: true},
+          );
 
-      } catch (e) {
-        res.status(500).json({status: e.message});
-      }
-    })
-    .put('/:id', async (req, res) => {
-      // by clicking on POST - here we change status from new to post
-    // updating in Load DB NEW to POST
-    // updating Shipper loads array NEW to POSTED
+          return res.status(200).json({editedLoad});
 
-      //
-      // After this request here or at some point -
-      // we loop over Trucks array with status IS and matching loads params with truck params
-      // if we find client receives info about truck found
-      // truck status changed for OL and Driver and his other trucks become unavailable.
+        } catch (e) {
+          res.status(500).json({status: e.message});
+        }
+      })
+
+    .patch('/:id', async (req, res) => {
       try {
+        console.log(req.params.id);
+        const postedLoad = await Load.findOneAndUpdate(
+          {_id: req.params.id},
+          {status: 'POSTED'},
+          {new: true},
+        );
+
+        console.log(postedLoad);
+
+        // After this request here or at some point -
+        // we loop over Trucks array with status IS and matching loads params with truck params
+        // if we find client receives info about truck found
+        // truck status changed for OL and Driver and his other trucks become unavailable.
+        // findTruck(postedLoad);
+
+        return res.json({status: ' was changed!'});
 
       } catch (e) {
         res.status(500).json({status: e.message});
