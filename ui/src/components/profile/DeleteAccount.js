@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
+
 import {useHttp} from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
 import {LoginContext} from '../context/LoginContext';
@@ -82,9 +82,5 @@ const DeleteAccount = props => {
   );
 };
 
-
-DeleteAccount.propTypes = {
-
-};
 
 export default DeleteAccount;

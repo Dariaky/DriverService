@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import {useHttp} from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
 
-import PropTypes from 'prop-types';
 
 const ChangePassword = props => {
 
@@ -91,10 +90,6 @@ const ChangePassword = props => {
       </form>
     </div>
   );
-};
-
-ChangePassword.propTypes = {
-
 };
 
 export default ChangePassword;
