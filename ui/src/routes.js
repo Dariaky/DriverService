@@ -20,6 +20,11 @@ import LoadsHistory
   from './components/profile/ShipperProfile/LoadsHistory/LoadsHistory';
 import NewLoadItemFull
   from './components/profile/ShipperProfile/NewLoads/NewLoadItem(full)/NewLoadItemFull';
+import CreateTruck
+  from './components/profile/DriverProfile/CreateTruck/CreateTruck';
+import MyTrucks from './components/profile/DriverProfile/MyTrucks/MyTrucks';
+import TruckItemFull
+  from './components/profile/DriverProfile/MyTrucks/TruckItme(full)/TruckItemFull';
 
 
 const useRoutes = (isAuthenticated, userId, userRole) => {
@@ -50,9 +55,12 @@ const useRoutes = (isAuthenticated, userId, userRole) => {
         <Route path={`/loads/new-loads`} exact component={NewLoads}/>
         <Route path={`/loads/posted-loads`} exact component={PostedLoads}/>
         <Route path={`/loads/loads-history`} exact component={LoadsHistory}/>
-
         <Route path={`/loads/:id`} exact component={NewLoadItemFull}/>
-        <Route path={`/loads/:id/hello`} exact component={NewLoadItemFull}/>
+
+
+        <Route path={`/trucks/create-truck`} exact component={CreateTruck}/>
+        <Route path={`/trucks/my-trucks`} exact component={MyTrucks}/>
+        <Route path={`/trucks/:id`} exact component={TruckItemFull}/>
 
         <Route path="/" exact component={Main} />
       </Switch>

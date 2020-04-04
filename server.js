@@ -8,6 +8,7 @@ const registration = require('./routes/api/registration');
 const login = require('./routes/api/login');
 const profile = require('./routes/api/profile');
 const load = require('./routes/api/load');
+const truck = require('./routes/api/truck');
 
 app = express();
 const PORT = config.get('port') || 8081;
@@ -39,6 +40,7 @@ app.use('/login', login);
 app.use(authorized);
 app.use('/profile', profile);
 app.use('/loads', load);
+app.use('/trucks', truck);
 
 
 app.use('*', (req, res) => {

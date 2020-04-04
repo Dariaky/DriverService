@@ -22,7 +22,6 @@ const ShipperProfile = props => {
           <Link to={`/loads/loads-history`} className="load__create-button">My History</Link>
         </li>
       </ul>
-
     </React.Fragment>
   );
 };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const PostedLoads = props => {
   return (
     <div>
-      Here you see statuses of your loads which are in progress
+      Here you see statuses of your loads which are in progress - shipping info;
     </div>
   );
 };

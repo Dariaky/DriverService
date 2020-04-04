@@ -2,10 +2,17 @@ const {Schema, model, Types} = require('mongoose');
 
 
 const TruckSchema = new Schema({
+  model: {type: String, required: true},
+  type: {type: String, required: true},
   createdBy: {type: Types.ObjectId, ref: 'Driver'},
-  assignedTo: {type: Types.ObjectId, ref: 'Driver'},
-  status: {type: String, required: true},
-  state: {type: String, required: true},
+  assignedTo: {type: String},
+  status: {type: String},
+  dimensions: {
+    width: {type: Number, required: true},
+    length: {type: Number, required: true},
+    height: {type: Number, required: true},
+  },
+  payload: {type: Number, required: true},
 });
 
 

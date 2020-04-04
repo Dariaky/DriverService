@@ -2,16 +2,17 @@ import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
-import NewLoadItem from './NewLoadItem(short)/NewLoadItem';
+import TruckItemShort from './TruckItem(short)/TruckItemShort';
+import './my-trucks.css';
 
 
-const NewLoads = props => {
+const MyTrucks = props => {
 
   const storageName = 'userData';
   const {request, error, clearError} = useHttp();
   const message = useMessage();
 
-  const [newLoads, setNewLoads] = useState([]);
+  const [myTrucks, setMyTrucks] = useState([]);
 
   useEffect(() => {
     message(error);
@@ -23,19 +24,19 @@ const NewLoads = props => {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
 
-        const receivedNewLoads = await request(`/loads/new-loads`, 'GET', null, {
+        const trucks = await request(`/trucks/my-trucks`, 'GET', null, {
           'Content-Type': 'application/json',
           'Authorization': storeData.token,
           'UserId': storeData.userId
         });
-        console.log(receivedNewLoads.foundNewLoads);
-        setNewLoads([
-          ...newLoads,
-          ...receivedNewLoads.foundNewLoads
-        ]) // meno male
+
+        setMyTrucks([
+          ...myTrucks,
+          ...trucks.foundTrucks
+        ])
 
       } catch(e) {
-        console.log('Loads were not received', e)
+        console.log('Trucks were not received', e)
       }
     }
     fetchData();
@@ -44,19 +45,19 @@ const NewLoads = props => {
 
   return (
 
-          <div>
-            <h1>Your Newly created Loads</h1>
-            {newLoads.length !== 0 ? <ul>
-              {newLoads.map(item => <NewLoadItem key={item._id} {...item}/>)}
-            </ul> : <p>Yet no new loads:(</p> }
+    <div>
+      <h1 className="section__title">My Trucks</h1>
+      {myTrucks.length !== 0 ? <ul className="truck__list">
+        {myTrucks.map(item => <TruckItemShort key={item._id} {...item}/>)}
+      </ul> : <p>Yet no new trucks:(</p> }
 
-          </div>
+    </div>
 
   );
 };
 
-NewLoads.propTypes = {
+MyTrucks.propTypes = {
 
 };
 
-export default NewLoads;
+export default MyTrucks;
