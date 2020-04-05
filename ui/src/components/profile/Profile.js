@@ -42,7 +42,7 @@ const Profile = props => {
       }
     }
     fetchData();
-  }, []);
+  }, [request]);
 
 
 
@@ -51,7 +51,7 @@ const Profile = props => {
     <div className="section__layout">
       {user.role === 'driver' ? <DriverProfile user={user}/> : <ShipperProfile user={user}/>}
       <div>
-        <img src={process.env.PUBLIC_URL + '/images/profile/no-photo.png'} alt="Profile Photo" />
+        <img src={process.env.PUBLIC_URL + '/images/profile/no-photo.png'} alt="My Avatar on Main Profile" />
         <figcaption>{user.email}</figcaption>
       </div>
     </div>

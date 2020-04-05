@@ -8,49 +8,58 @@ const Truck = require('../../models/Truck.model');
 
 
 router
+    /**
+     * @api {get} /trucks/my-loads
+     * @apiDescription Api provides driver with an Array of his/her trucks.
+     *
+     */
     .get('/my-trucks', async (req, res) => {
-
       try {
         const foundTrucks = await Truck.find({
-          createdBy: req.headers['userid']
+          createdBy: req.headers['userid'],
         });
 
         res.status(200).json(foundTrucks);
       } catch (e) {
         res.status(500).json({message: e.message});
       }
-
     })
+    /**
+     * @api {get} /trucks/shipments
+     * @apiDescription Api provides driver with an Array of loads
+     * currently assigned to him/her.
+     */
     .get('/shipments', async (req, res) => {
-
       try {
         const foundShipments = await Load.find({
-          assignedTo: req.headers['userid']
+          assignedTo: req.headers['userid'],
         });
 
         res.status(200).json(foundShipments);
       } catch (e) {
         res.status(500).json({message: e.message});
       }
-
     })
+    /**
+     * @api {post} /trucks/create-truck
+     * @apiDescription Api validates data about truck and if all good -
+     * writes it to the Truck Collection, so driver creates a new truck.
+     */
     .post('/create-truck', async (req, res) => {
-
       const schema = Joi.object({
         model: Joi.string()
-          .min(2)
-          .max(30)
-          .required(),
+            .min(2)
+            .max(30)
+            .required(),
         type: Joi.string()
-          .alphanum()
-          .required(),
+            .alphanum()
+            .required(),
         userId: Joi.string()
-          .alphanum()
-          .required(),
+            .alphanum()
+            .required(),
       });
 
       try {
-
         const {model, type, userId} = await schema.validateAsync(req.body);
 
         let parameters;
@@ -68,152 +77,176 @@ router
           createdBy: userId,
           assignedTo: '',
           status: '', // IS OL
-          ...parameters
+          ...parameters,
         });
 
         await newTruck.save();
         res.status(201).json({message: 'New Truck was created'});
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+    /**
+     * @api {get} /trucks/:id
+     * @apiDescription Api provides driver with a detailed info about
+     * his/her specific truck requested by its id.
+     */
+    .get('/:id', async (req, res) => {
+      try {
+        const truck = await Truck.findOne({
+          _id: req.params.id,
+        });
 
+        res.status(200).json(truck);
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+    /**
+     * @api {delete} /trucks/:id
+     * @apiDescription Api provides possibility for driver to delete truck.
+     * It is possible if only truck is not currently assigned to him.
+     *
+     */
+    .delete('/:id', async (req, res) => {
+      try {
+        const truck = await Truck.findOne({_id: req.params.id});
 
+        if (truck.assignedTo !== '') {
+          return res.status(400).json(
+              {message: 'Cannot delete assigned truck'},
+          );
+        }
+
+        await Truck.remove({_id: req.params.id});
+
+        res.status(200).json({message: 'Truck Deleted'});
       } catch (e) {
         res.status(500).json({message: e.message});
       }
     })
 
-  .get('/:id', async (req, res) => {
-    try {
-      const truck = await Truck.findOne({
-        _id: req.params.id,
+    /**
+     * @api {put} /trucks/:id
+     * @apiDescription Api provides possibility for driver to update truck info.
+     * It is possible if only truck is not currently assigned to him.
+     *
+     */
+    .put('/:id', async (req, res) => {
+      const schema = Joi.object({
+        model: Joi.string()
+            .min(2)
+            .max(30)
+            .required(),
+        type: Joi.string()
+            .alphanum()
+            .required(),
       });
 
-      res.status(200).json(truck);
+      try {
+        const {model, type} = await schema.validateAsync(req.body);
+        const truck = await Truck.findOne({_id: req.params.id});
 
-    } catch (e) {
-      res.status(500).json({message: e.message});
-    }
-  })
+        if (truck.assignedTo !== '') {
+          return res.status(400).json({message: 'Cannot edit assigned truck'});
+        }
 
-  .delete('/:id', async (req, res) => {
-    try {
+        let parameters;
+        if (type === 'sprinter') {
+          parameters = contants.SPRINTER;
+        } else if (type === 'small') {
+          parameters = contants.SMALL_STRAIGHT;
+        } else if (type === 'large') {
+          parameters = contants.LARGE_STRAIGHT;
+        }
 
-      const truck = await Truck.findOne({ _id: req.params.id });
+        const editedTruck = await Truck.findOneAndUpdate(
+            {_id: req.params.id},
+            {
+              model,
+              type,
+              ...parameters,
+            },
+            {new: true},
+        );
 
-      if(truck.assignedTo !== '') {
-        return res.status(400).json({message: 'Cannot delete assigned truck'})
+        return res.status(200).json(editedTruck);
+      } catch (e) {
+        res.status(500).json({message: e.message});
       }
+    })
 
-      await Truck.remove({_id: req.params.id,});
+    /**
+     * @api {patch} /trucks/:id/assign
+     * @apiDescription Api provides possibility for driver to assign truck.
+     * Driver is able to assign only one truck at a time. If driver has
+     * truck with status 'OL' it is impossible to assign other trucks until
+     * the load is delivered.
+     *
+     */
+    .patch('/:id/assign', async (req, res) => {
+      try {
+        const anyAssigned = await Truck.findOne( {status: 'OL'} );
 
-      res.status(200).json({message: 'Truck Deleted'});
+        if (anyAssigned) {
+          return res.status(400).json(
+              {
+                message: 'You cannot assign another truck unit ' +
+                'you deliver the load',
+              });
+        }
 
-    } catch (e) {
-      res.status(500).json({message: e.message});
-    }
-  })
+        // re-assign all trucks
+        await Truck.findOneAndUpdate({assignedTo: req.body.userId},
+            {
+              assignedTo: '',
+              status: '',
+            });
 
+        const assignedTruck = await Truck.updateOne(
+            {_id: req.params.id},
+            {
+              assignedTo: req.body.userId,
+              status: 'IS',
+            },
+            {new: true},
+        );
 
-  .put('/:id', async (req, res) => {
+        return res.json(assignedTruck);
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+    /**
+     * @api {patch} /trucks/:id/reassign
+     * @apiDescription Api provides possibility for driver to reassign truck.
+     * Driver is able to reassign only a truck currently assigned to him/her.
+     * If driver has truck with status 'OL' it is impossible to reassign truck
+     * until the load is delivered.
+     *
+     */
+    .patch('/:id/reassign', async (req, res) => {
+      try {
+        const match = await Truck.findOne( {_id: req.params.id} );
 
-    const schema = Joi.object({
-      model: Joi.string()
-        .min(2)
-        .max(30)
-        .required(),
-      type: Joi.string()
-        .alphanum()
-        .required(),
+        if (match.status === 'OL') {
+          return res.status(400).json({message: 'You cannot be reassigned ' +
+              'until you deliver the load'});
+        }
+
+        await Truck.updateOne(
+            {_id: req.params.id},
+            {
+              assignedTo: '',
+              status: 'IS',
+            },
+            {new: true},
+        );
+
+        return res.status(200).json({message: 'Truck was reassigned'});
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
     });
-
-
-    try {
-      const {model, type} = await schema.validateAsync(req.body);
-      const truck = await Truck.findOne({ _id: req.params.id });
-
-      if(truck.assignedTo !== '') {
-        return res.status(400).json({message: 'Cannot edit assigned truck'})
-      }
-
-      let parameters;
-      if (type === 'sprinter') {
-        parameters = contants.SPRINTER;
-      } else if (type === 'small') {
-        parameters = contants.SMALL_STRAIGHT;
-      } else if (type === 'large') {
-        parameters = contants.LARGE_STRAIGHT;
-      }
-
-      const editedTruck = await Truck.findOneAndUpdate(
-        {_id: req.params.id},
-        {
-         model,
-         type,
-         ...parameters
-        },
-        {new: true},
-      );
-
-      return res.status(200).json(editedTruck);
-
-    } catch (e) {
-      res.status(500).json({message: e.message});
-    }
-  })
-
-  // assign logic
-  .patch('/:id/assign', async (req, res) => {
-    try {
-
-      const anyAssigned = await Truck.findOne( {status: 'OL'} );
-
-      if (anyAssigned) {
-        return res.status(400).json({message: 'You cannot assign another truck unit you deliver the load'});
-      }
-
-      // re-assign all trucks
-      await Truck.findOneAndUpdate({assignedTo: req.body.userId},
-        {
-          assignedTo: '',
-          status: '',
-        });
-
-      const assignedTruck = await Truck.updateOne(
-        {_id: req.params.id},
-        {
-          assignedTo: req.body.userId,
-          status: 'IS'
-        },
-        {new: true},
-      );
-
-      return res.json(assignedTruck);
-
-    } catch (e) {
-      res.status(500).json({message: e.message});
-    }
-  })
-  .patch('/:id/reassign', async (req, res) => {
-    try {
-
-      const match = await Truck.findOne( {_id: req.params.id} );
-
-      if (match.status === 'OL') {
-        return res.status(400).json({message: 'You cannot be reassigned until you deliver the load'});
-      }
-
-      await Truck.updateOne(
-        {_id: req.params.id},
-        {
-          assignedTo: '',
-          status: 'IS'
-        },
-        {new: true},
-      );
-
-      return res.status(200).json({message: 'Truck was reassigned'});
-
-    } catch (e) {
-      res.status(500).json({message: e.message});
-    }
-  });
 
 module.exports = router;

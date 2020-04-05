@@ -41,7 +41,7 @@ const NewLoads = props => {
       }
     }
     fetchData();
-  }, []);
+  }, [newLoads, request]);
 
 
   return (

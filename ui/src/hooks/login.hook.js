@@ -27,6 +27,12 @@ export const useLogin = () => {
   }, []);
 
 
-  return { login, logout, token, userId, userRole }
+  return {
+    login,
+    logout,
+    token,
+    userId,
+    userRole
+  }
 
 };

@@ -4,7 +4,9 @@ const config = require('config');
 
 class AuthorizationService {
   async createToken(user, settings = {}) {
-    return await jwt.sign(JSON.stringify(user), config.get('jwtSecrete'), settings);
+    return await jwt.sign(
+        JSON.stringify(user), config.get('jwtSecrete'), settings,
+    );
   }
 
   async verifyToken(token) {

@@ -38,7 +38,7 @@ const ShipperShipmentInfo = props => {
       }
     }
     fetchData();
-  }, []);
+  }, [assignedLoads, request]);
 
 
 

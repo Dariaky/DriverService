@@ -6,8 +6,12 @@ const Joi = require('@hapi/joi');
 const Driver = require('../../models/Driver.model');
 const Shipper = require('../../models/Shipper.model');
 
-//   /profile/:id
 router
+    /**
+     * @api {get} /profile/:id
+     * @apiDescription User receives his/her profile info.
+     *
+     */
     .get('/:id', async (req, res) => {
       try {
         if (req.headers['role'] === 'driver') {
@@ -31,18 +35,21 @@ router
         res.send('Cannot find user');
       }
     })
-
+    /**
+     * @api {put} /profile/:id/change-password
+     * @apiDescription User is able to change his/her profile info.
+     * If passwords match, password will be updated.
+     *
+     */
     .put('/:id/change-password', async (req, res) => {
-
       const schema = Joi.object({
         oldPassword: Joi.string()
-          .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
         newPassword: Joi.ref('oldPassword'),
-        role: Joi.string()
+        role: Joi.string(),
       });
 
       try {
-
         const {newPassword} = await schema.validateAsync(req.body);
 
         const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -66,17 +73,21 @@ router
         res.status(500).json({status: e.message});
       }
     })
-
+    /**
+     * @api {delete} /profile/:id/delete-account
+     * @apiDescription Api is available only for shippers. Shipper needs
+     * to send valid email. If all good - his profile will be removed from
+     * Shippers Collection.
+     *
+     */
     .delete('/:id/delete-account', async (req, res) => {
-
       const schema = Joi.object({
         email: Joi.string()
-          .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-          .required(),
+            .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
+            .required(),
       });
 
       try {
-
         const {email} = await schema.validateAsync(req.body);
 
         const shipperCandidate = await Shipper.findOne({email});
@@ -84,7 +95,6 @@ router
         if (!shipperCandidate) {
           return res.status(400).json({message: 'Wrong email'});
         }
-
 
         await Shipper.findOneAndRemove({
           _id: req.params.id,

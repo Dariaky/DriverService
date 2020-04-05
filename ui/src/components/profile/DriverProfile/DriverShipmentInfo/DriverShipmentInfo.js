@@ -37,7 +37,7 @@ const DriverShipmentInfo = props => {
       }
     }
     fetchData();
-  }, []);
+  }, [request, shipments]);
 
 
   return (

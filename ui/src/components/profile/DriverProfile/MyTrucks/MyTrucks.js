@@ -42,7 +42,7 @@ const MyTrucks = props => {
       }
     }
     fetchData();
-  }, []);
+  }, [myTrucks, request]);
 
 
   return (
