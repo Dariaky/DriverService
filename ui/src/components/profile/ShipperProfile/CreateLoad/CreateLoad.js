@@ -64,9 +64,11 @@ const CreateLoad = props => {
         <div className="form__container">
           <label htmlFor="load-title" className="form__label">Title</label>
           <input
+            required
             id="load-title"
             type="text"
             name="title"
+            placeholder="Book boxes"
             className="form__input"
             onChange={changeHandler}
           />
@@ -75,9 +77,11 @@ const CreateLoad = props => {
           <label htmlFor="load-width"
                  className="form__label">Width</label>
           <input
+            required
             type="number"
             id="load-width"
             name="width"
+            placeholder="1000"
             className="form__input"
             onChange={changeHandler}
           />
@@ -86,9 +90,11 @@ const CreateLoad = props => {
           <label htmlFor="load-length"
                  className="form__label">Length</label>
           <input
+            required
             type="number"
             id="load-length"
             name="length"
+            placeholder="1000"
             className="form__input"
             onChange={changeHandler}
           />
@@ -97,17 +103,21 @@ const CreateLoad = props => {
           <label htmlFor="load-height"
                  className="form__label">Height</label>
           <input
+            required
             type="number"
             id="load-height"
             name="height"
+            placeholder="1000"
             className="form__input"
             onChange={changeHandler}
           />
         </div>
         <div className="form__container">
           <label htmlFor="load-payload"
-                 className="form__label">Payload</label>
+                 className="form__label">Payload </label>
           <input
+            required
+            placeholder="2000 (weight)"
             type="number"
             id="load-payload"
             name="payload"
