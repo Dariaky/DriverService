@@ -3,7 +3,7 @@ const config = require('config');
 
 
 class AuthorizationService {
-  async createToken(user, settings) {
+  async createToken(user, settings = {}) {
     return await jwt.sign(JSON.stringify(user), config.get('jwtSecrete'), settings);
   }
 

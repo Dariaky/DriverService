@@ -48,14 +48,14 @@ router
             }
 
             const jwtToken = await authorizationService
-                .createToken(user, {});
+                .createToken(user);
             res.status(200).json({
               jwtToken,
               userId: user.id,
               role: user.role,
             });
           } catch (err) {
-            res.status(500).json({status: err.message});
+            res.status(500).json({message: err.message});
           }
         },
     );

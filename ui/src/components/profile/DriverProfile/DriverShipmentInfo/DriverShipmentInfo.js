@@ -44,13 +44,16 @@ const DriverShipmentInfo = props => {
     <div className="section__layout">
       <DriverNav/>
       <h1 className="section__title">Shipment Info</h1>
-      {shipments.map(shipment => <li>
-          <h4>Load Title: {shipment.title}</h4>
-          <div>Load state: {shipment.state}</div>
-          {/*<button>Pick up</button>*/}
-          {/*<button>Deliver</button>*/}
-      </li>
-      )}
+
+        {shipments.length !== 0 ? <ul className="driver-shipments__list">
+          {shipments.map(shipment =>
+            <li className="driver-shipments__item">
+            <h4>Load Title: {shipment.title}</h4>
+            <div>Load state: {shipment.state}</div>
+          </li>
+          )}
+        </ul> : <p className="driver-shipments__no-items">Yet no assigned loads:(</p> }
+
     </div>
   );
 };

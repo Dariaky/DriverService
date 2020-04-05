@@ -32,7 +32,7 @@ app.use(bodyParser.json( {extended: true}));
 
 // Routes:
 app.get('/', (req, res) => {
-  return res.status(200).json({status: 'OK!'});
+  return res.status(200).json({message: 'OK!'});
 });
 
 app.use('/registration', registration);

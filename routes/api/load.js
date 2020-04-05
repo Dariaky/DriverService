@@ -18,7 +18,7 @@ router
 
         res.status(200).json(foundNewLoads);
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
 
     })
@@ -32,7 +32,7 @@ router
 
       res.status(200).json(foundLoads);
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
 
   })
@@ -78,9 +78,9 @@ router
         });
 
         await newLoad.save();
-        res.status(201).json({status: 'Load was created!'});
+        res.status(201).json({message: 'Load was created!'});
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
     })
     .get('/:id', async (req, res) => {
@@ -92,7 +92,7 @@ router
         res.status(200).json(load);
 
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
     })
     .delete('/:id', async (req, res) => {
@@ -101,10 +101,10 @@ router
           _id: req.params.id,
         });
 
-        res.status(200).json({status: 'Load Deleted'});
+        res.status(200).json({message: 'Load Deleted'});
 
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
     })
 
@@ -148,7 +148,7 @@ router
           return res.status(200).json(editedLoad);
 
         } catch (e) {
-          res.status(500).json({status: e.message});
+          res.status(500).json({message: e.message});
         }
       })
 
@@ -165,7 +165,7 @@ router
         return res.status(200).json(result);
 
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
     });
 

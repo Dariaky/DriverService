@@ -12,21 +12,19 @@ router
       try {
         if (req.headers['role'] === 'driver') {
           const driver = await Driver.findOne({_id: req.params.id});
-          return res.json({
+          return res.status(200).json({
             id: driver.id,
             name: driver.name,
             email: driver.email,
             role: driver.role,
-            trucks: driver.trucks,
           });
         } else {
           const shipper = await Shipper.findOne({_id: req.params.id});
-          return res.json({
+          return res.status(200).json({
             id: shipper.id,
             name: shipper.name,
             email: shipper.email,
             role: shipper.role,
-            trucks: shipper.trucks,
           });
         }
       } catch (err) {
@@ -80,6 +78,13 @@ router
       try {
 
         const {email} = await schema.validateAsync(req.body);
+
+        const shipperCandidate = await Shipper.findOne({email});
+
+        if (!shipperCandidate) {
+          return res.status(400).json({message: 'Wrong email'});
+        }
+
 
         await Shipper.findOneAndRemove({
           _id: req.params.id,

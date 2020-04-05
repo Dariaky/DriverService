@@ -17,9 +17,9 @@ router
 
         res.status(200).json(foundTrucks);
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
-      // here we search for in Load db for all loads from with shipper id with status new
+
     })
     .get('/shipments', async (req, res) => {
 
@@ -30,7 +30,7 @@ router
 
         res.status(200).json(foundShipments);
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
 
     })
@@ -76,7 +76,7 @@ router
 
 
       } catch (e) {
-        res.status(500).json({status: e.message});
+        res.status(500).json({message: e.message});
       }
     })
 
@@ -89,7 +89,7 @@ router
       res.status(200).json(truck);
 
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
   })
 
@@ -99,15 +99,15 @@ router
       const truck = await Truck.findOne({ _id: req.params.id });
 
       if(truck.assignedTo !== '') {
-        return res.status(400).json({status: 'Cannot delete assigned truck'})
+        return res.status(400).json({message: 'Cannot delete assigned truck'})
       }
 
       await Truck.remove({_id: req.params.id,});
 
-      res.status(200).json({status: 'Truck Deleted'});
+      res.status(200).json({message: 'Truck Deleted'});
 
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
   })
 
@@ -130,7 +130,7 @@ router
       const truck = await Truck.findOne({ _id: req.params.id });
 
       if(truck.assignedTo !== '') {
-        return res.status(400).json({status: 'Cannot edit assigned truck'})
+        return res.status(400).json({message: 'Cannot edit assigned truck'})
       }
 
       let parameters;
@@ -155,20 +155,18 @@ router
       return res.status(200).json(editedTruck);
 
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
   })
 
   // assign logic
-  // if driver chooses truck: truck status - IS, truck assignTo - driver's id!!!!
-
   .patch('/:id/assign', async (req, res) => {
     try {
 
       const anyAssigned = await Truck.findOne( {status: 'OL'} );
 
       if (anyAssigned) {
-        return res.status(400).json({status: 'You cannot assign another truck unit you deliver the load'});
+        return res.status(400).json({message: 'You cannot assign another truck unit you deliver the load'});
       }
 
       // re-assign all trucks
@@ -190,7 +188,7 @@ router
       return res.json(assignedTruck);
 
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
   })
   .patch('/:id/reassign', async (req, res) => {
@@ -199,7 +197,7 @@ router
       const match = await Truck.findOne( {_id: req.params.id} );
 
       if (match.status === 'OL') {
-        return res.status(400).json({status: 'You cannot be reassigned until you deliver the load'});
+        return res.status(400).json({message: 'You cannot be reassigned until you deliver the load'});
       }
 
       await Truck.updateOne(
@@ -211,10 +209,10 @@ router
         {new: true},
       );
 
-      return res.status(200).json({status: 'Truck was reassigned'});
+      return res.status(200).json({message: 'Truck was reassigned'});
 
     } catch (e) {
-      res.status(500).json({status: e.message});
+      res.status(500).json({message: e.message});
     }
   });
 
