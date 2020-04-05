@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
+import ShipperNav from '../ShipperNav/ShipperNav';
 
-import PropTypes from 'prop-types';
 
 const CreateLoad = props => {
 
@@ -56,11 +55,12 @@ const CreateLoad = props => {
 
 
   return (
-    <div>
-      <h1>Create load</h1>
+    <div className="section__layout">
+      <ShipperNav/>
+      <h1 className="section__title">Create load</h1>
       <form
         onSubmit={createLoadHandler}
-        className="form login__form">
+        className="form">
         <div className="form__container">
           <label htmlFor="load-title" className="form__label">Title</label>
           <input
@@ -127,10 +127,6 @@ const CreateLoad = props => {
       </form>
     </div>
   );
-};
-
-CreateLoad.propTypes = {
-
 };
 
 export default CreateLoad;

@@ -1,19 +1,13 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-
 import './footer.css';
 
 const Footer = props => {
   return (
     <footer className="footer">
-      @Copyright 2020 Make your personal driver app
+      @Copyright 2020 CargoCult - let us take care about your transportation.
     </footer>
   );
-};
-
-Footer.propTypes = {
-
 };
 
 export default Footer;

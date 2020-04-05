@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {useHttp} from '../../../../../hooks/http.hook';
 import {useMessage} from '../../../../../hooks/message.hook';
-import EditLoad
-  from '../../../ShipperProfile/NewLoads/NewLoadItem(full)/NewLoadItemFull';
 import EditTruck from '../../EditTruck/EditTruck';
+import DriverNav from '../../DriverNav/DriverNav';
+
+import './truck-item-full.css';
 
 const TruckItemFull = props => {
 
@@ -24,13 +24,12 @@ const TruckItemFull = props => {
     assignedTo: '',
   });
 
-
   useEffect(() => {
     message(error);
     clearError();
   }, [error, message, clearError]);
 
-  useEffect( useCallback(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const receivedTruck = await request(`${pathname}`, 'GET', null, {
@@ -51,7 +50,7 @@ const TruckItemFull = props => {
       }
     }
     fetchData();
-  }), []);
+  }, []);
 
   const editTruckHandler = () => {
     setEditForm(!editForm);
@@ -129,25 +128,33 @@ const TruckItemFull = props => {
     if (assigned === '') {
       return (
         <React.Fragment>
-          <button onClick={editTruckHandler}>Edit</button>
-          <button onClick={deleteTruckHandler}>Delete</button>
-          <button onClick={assignTruckHandler}>Assign</button>
-
-          { editForm ? <EditTruck onEditedTruck={onEditedTruck} {...truck}/> : ''}
+          <div className="full-truck__button-container">
+            <button
+              className="trucks__item-button full-truck__button"
+              onClick={deleteTruckHandler}>Delete</button>
+            <button
+              className="trucks__item-button full-truck__button"
+              onClick={editTruckHandler}>Edit</button>
+            <button
+              className="trucks__item-button full-truck__button"
+              onClick={assignTruckHandler}>Assign</button>
+          </div>
+            { editForm ? <EditTruck onEditedTruck={onEditedTruck} {...truck}/> : ''}
         </React.Fragment>
       )
     } else {
-      return <button onClick={reassignTruckHandler}>Reassign</button>
+      return <button
+        className="trucks__item-button full-truck__button"
+        onClick={reassignTruckHandler}>Reassign</button>
     }
 
   };
 
   return (
-    <div>
-      <div>
-        Model: {truck.model}
-      </div>
-      <div>
+    <div className="section__layout">
+      <DriverNav/>
+      <h1 className="section__title">{truck.model}</h1>
+      <div className="full-truck__parameter">
         Type: {truck.type}
       </div>
       {buttonLayout(truck.assignedTo)}
@@ -155,8 +162,5 @@ const TruckItemFull = props => {
   );
 };
 
-TruckItemFull.propTypes = {
-
-};
 
 export default TruckItemFull;

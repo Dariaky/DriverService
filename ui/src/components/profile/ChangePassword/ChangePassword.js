@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import {useHttp} from '../hooks/http.hook';
-import { useMessage } from '../hooks/message.hook';
+import {useHttp} from '../../../hooks/http.hook';
+import { useMessage } from '../../../hooks/message.hook';
 
+import './change-password.css';
 
 const ChangePassword = props => {
 
@@ -52,13 +53,16 @@ const ChangePassword = props => {
 
 
   return (
-    <div className="login">
+    <div className="section__layout">
       <h1 className="section__title">Change Password</h1>
       <form
         onSubmit={changePasswordHandler}
-        className="form login__form">
+        className="form">
         <div className="form__container">
-          <label htmlFor="user-old-password" className="form__label">Old Password</label>
+          <label
+
+            htmlFor="user-old-password"
+            className="form__label change-password__label">Old Password</label>
           <input
             id="user-old-password"
             type="password"
@@ -69,7 +73,7 @@ const ChangePassword = props => {
         </div>
         <div className="form__container">
           <label htmlFor="user-new-password"
-                 className="form__label">New Password</label>
+                 className="form__label change-password__label">New Password</label>
           <input
             type="password"
             id="user-new-password"

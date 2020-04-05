@@ -1,8 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
+
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
 import TruckItemShort from './TruckItem(short)/TruckItemShort';
+
 import './my-trucks.css';
 
 
@@ -19,7 +20,7 @@ const MyTrucks = props => {
     clearError();
   }, [error, message, clearError]);
 
-  useEffect( useCallback(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
@@ -40,24 +41,20 @@ const MyTrucks = props => {
       }
     }
     fetchData();
-  }), []);
+  }, []);
 
 
   return (
 
-    <div>
+    <div className="section__layout">
       <h1 className="section__title">My Trucks</h1>
-      {myTrucks.length !== 0 ? <ul className="truck__list">
+      {myTrucks.length !== 0 ? <ul className="trucks__list">
         {myTrucks.map(item => <TruckItemShort key={item._id} {...item}/>)}
-      </ul> : <p>Yet no new trucks:(</p> }
+      </ul> : <p className="trucks__no-items">Yet no new trucks:(</p> }
 
     </div>
 
   );
-};
-
-MyTrucks.propTypes = {
-
 };
 
 export default MyTrucks;

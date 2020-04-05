@@ -1,11 +1,11 @@
-.trucks__list {
+.new-loads__list {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.trucks__item {
+.new-loads__item {
     padding: 1em 4em;
     border: 3px solid #006f6f;
     margin: 1em 2em;
@@ -15,14 +15,18 @@
     background-color: #ffffff;
 }
 
-.trucks__item-title {
+.new-loads__item-title {
     padding: 1em 0;
     word-wrap: break-word;
     white-space: normal;
+
 }
 
+.new-loads__item-info {
+    margin-bottom: 1em;
+}
 
-.trucks__item-button {
+.new-loads__item-button {
     cursor: pointer;
     padding: 1em 2em;
     background-color: #006f6f;
@@ -32,17 +36,11 @@
     font-weight: 700;
 }
 
-.trucks__item-button:hover {
+.new-loads__item-button:hover {
     background-color: #005151;
 }
 
-.trucks__no-items {
+.new-loads__no-items {
     font-size: 20px;
     font-weight: 600;
 }
-
-.isAssigned {
-    background-color: #064a4a;
-    color: white;
-}
-

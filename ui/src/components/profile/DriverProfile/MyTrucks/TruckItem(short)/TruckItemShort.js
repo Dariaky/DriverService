@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 const TruckItemShort = ({_id, model, assignedTo}) => {
 
@@ -10,7 +9,7 @@ const TruckItemShort = ({_id, model, assignedTo}) => {
     history.push(`/trucks/${_id}`);
   };
 
-  const cls = ['truck__item'];
+  const cls = ['trucks__item'];
 
   if(assignedTo) {
     cls.push('isAssigned');
@@ -18,15 +17,13 @@ const TruckItemShort = ({_id, model, assignedTo}) => {
 
   return (
     <li className={cls.join(' ')}>
-      <h2>Model: {model}</h2>
+      <h2 className="trucks__item-title">{model}</h2>
 
-      <button onClick={showTruckHandler}>View Details</button>
+      <button
+        className="trucks__item-button"
+        onClick={showTruckHandler}>View Details</button>
     </li>
   );
-};
-
-TruckItemShort.propTypes = {
-
 };
 
 export default TruckItemShort;

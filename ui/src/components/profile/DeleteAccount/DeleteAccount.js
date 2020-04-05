@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 
-import {useHttp} from '../hooks/http.hook';
-import { useMessage } from '../hooks/message.hook';
-import {LoginContext} from '../context/LoginContext';
+import {useHttp} from '../../../hooks/http.hook';
+import { useMessage } from '../../../hooks/message.hook';
+import {LoginContext} from '../../../context/LoginContext';
 
 const DeleteAccount = props => {
 
@@ -51,11 +51,11 @@ const DeleteAccount = props => {
 
 
   return (
-    <div className="login">
+    <div className="section__layout">
       <h1 className="section__title">Are you sure you want to delete your account?</h1>
       <form
         onSubmit={deleteHandler}
-        className="form login__form">
+        className="form">
 
         <div className="form__container">
           <label htmlFor="user-email"

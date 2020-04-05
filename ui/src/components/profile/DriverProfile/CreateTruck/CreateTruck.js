@@ -3,8 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
-
-import PropTypes from 'prop-types';
+import DriverNav from '../DriverNav/DriverNav';
 
 const CreateTruck = props => {
 
@@ -52,15 +51,17 @@ const CreateTruck = props => {
 
 
   return (
-    <div>
-      <h1>Create Truck</h1>
+    <div className="section__layout">
+      <DriverNav/>
+      <h1 className="section__title">Create Truck</h1>
       <form
         onSubmit={createTruckHandler}
-        className="form login__form">
+        className="form">
         <div className="form__container">
           <label htmlFor="truck-model" className="form__label">Model</label>
           <input
             required
+            placeholder="Porsche-911"
             id="truck-model"
             type="text"
             name="model"
@@ -95,10 +96,6 @@ const CreateTruck = props => {
       </form>
     </div>
   );
-};
-
-CreateTruck.propTypes = {
-
 };
 
 export default CreateTruck;

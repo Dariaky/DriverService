@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useHttp } from '../../hooks/http.hook';
 import { useMessage } from '../../hooks/message.hook';
-import PropTypes from 'prop-types';
-import './registration.css'
+
 
 const Registration = props => {
   const history = useHistory();
@@ -41,14 +40,12 @@ const Registration = props => {
     }
   };
 
-
   return (
-    <div className="registration">
+    <div className="section__layout">
       <h1 className="section__title">Registration</h1>
       <form
         onSubmit={registrationHandler}
-        className="form registration__form">
-
+        className="form">
         <div className="form__container">
           <label htmlFor="user-email" className="form__label">Email</label>
           <input
@@ -79,6 +76,7 @@ const Registration = props => {
             id="user-password"
             name="password"
             className="form__input"
+            autoComplete="on"
             onChange={changeHandler}
           />
         </div>
@@ -105,10 +103,6 @@ const Registration = props => {
       </form>
     </div>
   );
-};
-
-Registration.propTypes = {
-
 };
 
 export default Registration;

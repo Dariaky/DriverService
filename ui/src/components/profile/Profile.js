@@ -1,7 +1,5 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useHttp} from '../../hooks/http.hook';
-
-import PropTypes from 'prop-types';
 
 import ShipperProfile from './ShipperProfile/ShipperProfile';
 import DriverProfile from './DriverProfile/DriverProfile';
@@ -21,7 +19,7 @@ const Profile = props => {
   });
 
 
-  useEffect( useCallback(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
@@ -44,21 +42,20 @@ const Profile = props => {
       }
     }
     fetchData();
-  }), []);
+  }, []);
 
 
 
 
   return (
-    <section>
-      {/*<h1>Welcome {user.name}!</h1>*/}
+    <div className="section__layout">
       {user.role === 'driver' ? <DriverProfile user={user}/> : <ShipperProfile user={user}/>}
-    </section>
+      <div>
+        <img src={process.env.PUBLIC_URL + '/images/profile/no-photo.png'} alt="Profile Photo" />
+        <figcaption>{user.email}</figcaption>
+      </div>
+    </div>
   );
-};
-
-Profile.propTypes = {
-
 };
 
 export default Profile;

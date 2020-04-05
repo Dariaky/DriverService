@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
 import {LoginContext} from '../../context/LoginContext';
+
 import './header.css';
-import Profile from '../profile/Profile';
+
 
 const Header = props => {
 
@@ -16,10 +16,6 @@ const Header = props => {
 
   const changePasswordHandler = async () => {
 
-  };
-
-  const deleteUser = async () => {
-    console.log("Props in headers: ", props);
   };
 
   const UnAuthorizedMenu = () => {
@@ -38,9 +34,9 @@ const Header = props => {
   const AuthorizedMenu = () => {
     return (
       <React.Fragment>
-      <div className="header__logo">
-        <Link className="header__logo-link"
-              to={`/profile/${props.userId}`}>Profile</Link>
+      <div className="header__profile">
+        <Link className="header__profile-link"
+              to={`/profile/${props.userId}`}>My Profile</Link>
       </div>
       <div className="header__log">
         <Link
@@ -53,7 +49,6 @@ const Header = props => {
           to={`/profile/${props.userId}/change-password`}>Change Password</Link>
 
         {props.userRole === 'shipper' ? <Link
-          onClick={deleteUser}
           className="header__link header__register-link"
           to={`/profile/${props.userId}/delete-account`}>Delete Account</Link> : ''}
       </div>
@@ -65,19 +60,13 @@ const Header = props => {
       <header className="header">
         <div className="header__content">
           <div className="header__logo">
-            <Link className="header__logo-link" to="/">DriverApp</Link>
+            <Link className="header__logo-link" to="/">CargoCult</Link>
           </div>
             {!props.isAuthenticated ? <UnAuthorizedMenu/> : <AuthorizedMenu/>}
         </div>
       </header>
     )
 
-
-
-
-};
-
-Header.propTypes = {
 
 };
 

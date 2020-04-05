@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
 
@@ -49,8 +49,8 @@ const EditLoad = ({title, width, length, height, payload, onEditedLoad})=> {
     <div>
       <form
         onSubmit={createLoadHandler}
-        className="form login__form">
-        <h4>Edit Form</h4>
+        className="form">
+        <h4 className="form__title">Edit Form</h4>
         <div className="form__container">
           <label htmlFor="load-title" className="form__label">Title</label>
           <input
@@ -124,8 +124,5 @@ const EditLoad = ({title, width, length, height, payload, onEditedLoad})=> {
   );
 };
 
-EditLoad.propTypes = {
-
-};
 
 export default EditLoad;

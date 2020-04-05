@@ -2,10 +2,8 @@ import React, {useState, useEffect, useContext} from 'react';
 import { useHistory } from 'react-router-dom';
 import { useHttp } from '../../hooks/http.hook';
 import { useMessage } from '../../hooks/message.hook';
-import PropTypes from 'prop-types';
-
-import './login.css'
 import {LoginContext} from '../../context/LoginContext';
+
 
 const Login = props => {
   const history = useHistory();
@@ -46,11 +44,11 @@ const Login = props => {
 
 
   return (
-    <div className="login">
+    <div className="section__layout">
       <h1 className="section__title">Sign In</h1>
       <form
         onSubmit={loginHandler}
-        className="form login__form">
+        className="form">
         <div className="form__container">
           <label htmlFor="user-email" className="form__label">Email</label>
           <input
@@ -69,6 +67,7 @@ const Login = props => {
             type="password"
             id="user-password"
             name="password"
+            autoComplete="on"
             className="form__input"
             onChange={changeHandler}
           />
@@ -99,10 +98,6 @@ const Login = props => {
       </form>
     </div>
   );
-};
-
-Login.propTypes = {
-
 };
 
 export default Login;

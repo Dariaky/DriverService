@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const NotFound = props => {
   return (
@@ -10,10 +9,6 @@ const NotFound = props => {
       <a href="/">Back Home</a>
     </div>
   );
-};
-
-NotFound.propTypes = {
-
 };
 
 export default NotFound;

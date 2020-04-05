@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import Profile from './components/profile/Profile';
 import Main from './components/main/Main';
@@ -8,16 +7,14 @@ import Login from './components/login/Login';
 import Registration from './components/registration/Registration';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
-import ChangePassword from './components/ChangePassword';
-import DeleteAccount from './components/DeleteAccount';
+import ChangePassword from './components/profile/ChangePassword/ChangePassword';
+import DeleteAccount from './components/profile/DeleteAccount/DeleteAccount';
 
 import CreateLoad
   from './components/profile/ShipperProfile/CreateLoad/CreateLoad';
 import NewLoads from './components/profile/ShipperProfile/NewLoads/NewLoads';
-import PostedLoads
-  from './components/profile/ShipperProfile/PostedLoads/PostedLoads';
-import LoadsHistory
-  from './components/profile/ShipperProfile/LoadsHistory/LoadsHistory';
+import ShipperShipmentInfo
+  from './components/profile/ShipperProfile/ShipperShipmentInfo/ShipperShipmentInfo';
 import NewLoadItemFull
   from './components/profile/ShipperProfile/NewLoads/NewLoadItem(full)/NewLoadItemFull';
 import CreateTruck
@@ -25,6 +22,8 @@ import CreateTruck
 import MyTrucks from './components/profile/DriverProfile/MyTrucks/MyTrucks';
 import TruckItemFull
   from './components/profile/DriverProfile/MyTrucks/TruckItme(full)/TruckItemFull';
+import DriverShipmentInfo
+  from './components/profile/DriverProfile/DriverShipmentInfo/DriverShipmentInfo';
 
 
 const useRoutes = (isAuthenticated, userId, userRole) => {
@@ -53,13 +52,12 @@ const useRoutes = (isAuthenticated, userId, userRole) => {
 
         <Route path={`/loads/create-load`} exact component={CreateLoad}/>
         <Route path={`/loads/new-loads`} exact component={NewLoads}/>
-        <Route path={`/loads/posted-loads`} exact component={PostedLoads}/>
-        <Route path={`/loads/loads-history`} exact component={LoadsHistory}/>
+        <Route path={`/loads/shipments`} exact component={ShipperShipmentInfo}/>
         <Route path={`/loads/:id`} exact component={NewLoadItemFull}/>
-
 
         <Route path={`/trucks/create-truck`} exact component={CreateTruck}/>
         <Route path={`/trucks/my-trucks`} exact component={MyTrucks}/>
+        <Route path={`/trucks/shipments`} exact component={DriverShipmentInfo}/>
         <Route path={`/trucks/:id`} exact component={TruckItemFull}/>
 
         <Route path="/" exact component={Main} />
@@ -68,13 +66,7 @@ const useRoutes = (isAuthenticated, userId, userRole) => {
     </React.Fragment>
   );
 
-
-
-
 };
 
-useRoutes.propTypes = {
-
-};
 
 export default useRoutes;

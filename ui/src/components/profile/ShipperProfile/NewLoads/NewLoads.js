@@ -1,9 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
+
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
 import NewLoadItem from './NewLoadItem(short)/NewLoadItem';
+import ShipperNav from '../ShipperNav/ShipperNav';
 
+import './new-loads.css';
 
 const NewLoads = props => {
 
@@ -18,7 +20,7 @@ const NewLoads = props => {
     clearError();
   }, [error, message, clearError]);
 
-  useEffect( useCallback(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
@@ -28,35 +30,30 @@ const NewLoads = props => {
           'Authorization': storeData.token,
           'UserId': storeData.userId
         });
-        console.log(receivedNewLoads.foundNewLoads);
+
         setNewLoads([
           ...newLoads,
           ...receivedNewLoads.foundNewLoads
-        ]) // meno male
+        ])
 
       } catch(e) {
         console.log('Loads were not received', e)
       }
     }
     fetchData();
-  }), []);
+  }, []);
 
 
   return (
-
-          <div>
-            <h1>Your Newly created Loads</h1>
-            {newLoads.length !== 0 ? <ul>
+          <div className="section__layout">
+            <ShipperNav/>
+            <h1 className="section__title">My New Loads</h1>
+            {newLoads.length !== 0 ? <ul className="new-loads__list">
               {newLoads.map(item => <NewLoadItem key={item._id} {...item}/>)}
-            </ul> : <p>Yet no new loads:(</p> }
+            </ul> : <p className="new-loads__no-items">Yet no new loads:(</p> }
 
           </div>
-
   );
-};
-
-NewLoads.propTypes = {
-
 };
 
 export default NewLoads;

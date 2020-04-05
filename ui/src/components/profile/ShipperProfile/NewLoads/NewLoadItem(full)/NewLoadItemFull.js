@@ -1,9 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {useHttp} from '../../../../../hooks/http.hook';
 import {useMessage} from '../../../../../hooks/message.hook';
 import EditLoad from '../../EditLoad/EditLoad';
+import ShipperNav from '../../ShipperNav/ShipperNav';
+
+import './load-item-full.css';
 
 const NewLoadItemFull = props => {
 
@@ -32,12 +34,13 @@ const NewLoadItemFull = props => {
 
   const postLoadItemHandler = async () => {
 
-    const awayt = await request(`${pathname}`, 'PATCH', null, {
+    await request(`${pathname}`, 'PATCH', null, {
       'Content-Type': 'application/json',
       'Authorization': storeData.token
     });
 
-    console.log(awayt);
+    console.log("Load was posted!");
+    history.push('/loads/new-loads');
 
   };
 
@@ -71,7 +74,7 @@ const NewLoadItemFull = props => {
   };
 
 
-  useEffect( useCallback(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const receiveLoad = await request(`${pathname}`, 'GET', null, {
@@ -94,32 +97,40 @@ const NewLoadItemFull = props => {
       }
     }
     fetchData();
-  }), []);
+  }, []);
 
 
 
   return (
-    <div>
-        Title: {newLoad.title}
-      <div>
-        Width: {newLoad.width}
-        Length: {newLoad.length}
-        Height: {newLoad.height}
+    <div className="section__layout">
+      <ShipperNav/>
+      <h1 className="section__title">{newLoad.title}</h1>
+      <div className="full-load__info">
+        <div className="full-load__parameter">
+          Width: {newLoad.width}
+        </div>
+        <div className="full-load__parameter">
+          Length: {newLoad.length}
+        </div>
+        <div className="full-load__parameter">
+          Height: {newLoad.height}
+        </div>
+        <div className="full-load__parameter">
+          PayLoad: {newLoad.payload}
+        </div>
+        <button
+          className="new-loads__item-button full-load__button"
+          onClick={deleteLoadItemHandler}>Delete</button>
+        <button
+          className="new-loads__item-button full-load__button"
+          onClick={editLoadItemHandler}>Edit</button>
+        <button
+          className="new-loads__item-button full-load__button"
+          onClick={postLoadItemHandler}>Post</button>
       </div>
-      <div>
-        PayLoad: {newLoad.payload}
-      </div>
-      <button onClick={editLoadItemHandler}>Edit</button>
-      <button onClick={deleteLoadItemHandler}>Delete</button>
-      <button onClick={postLoadItemHandler}>Post</button>
-
       { editForm ? <EditLoad onEditedLoad={onEditedLoad} {...newLoad}/> : ''}
     </div>
   );
-};
-
-NewLoadItemFull.propTypes = {
-
 };
 
 export default NewLoadItemFull;

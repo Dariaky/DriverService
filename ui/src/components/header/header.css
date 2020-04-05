@@ -11,10 +11,12 @@
     vertical-align: center;
 }
 
-.header__logo {
+.header__logo,
+.header__profile {
     height: 50px;
     line-height: 50px;
 }
+
 
 .header__logname {
     height: 50px;
@@ -22,13 +24,18 @@
     white-space: nowrap;
 }
 
-.header__logo-link {
+.header__logo-link,
+.header__profile-link {
     color: #ffffff;
     letter-spacing: 1.2px;
     font-size: 36px;
     font-weight: 800;
     font-family: 'Liu Jian Mao Cao', cursive;
     white-space: nowrap;
+}
+
+.header__profile-link {
+    padding-left: 8em;
 }
 
 .header__log {
