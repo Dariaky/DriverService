@@ -34,13 +34,17 @@ const NewLoadItemFull = props => {
 
   const postLoadItemHandler = async () => {
 
-    await request(`${pathname}`, 'PATCH', null, {
-      'Content-Type': 'application/json',
-      'Authorization': storeData.token
-    });
+    try {
+      const result = await request(`${pathname}`, 'PATCH', null, {
+        'Content-Type': 'application/json',
+        'Authorization': storeData.token
+      });
 
-    console.log("Load was posted!");
-    history.push('/loads/new-loads');
+      console.log(`${result}`);
+    } catch(e) {
+      console.log('Truck was not found: ', e);
+    }
+
 
   };
 
@@ -63,11 +67,11 @@ const NewLoadItemFull = props => {
 
     setLoad({
       ...newLoad,
-      title: editedLoad.editedLoad.title,
-      width: editedLoad.editedLoad.dimensions.width,
-      length: editedLoad.editedLoad.dimensions.length,
-      height: editedLoad.editedLoad.dimensions.height,
-      payload: editedLoad.editedLoad.payload,
+      title: editedLoad.title,
+      width: editedLoad.dimensions.width,
+      length: editedLoad.dimensions.length,
+      height: editedLoad.dimensions.height,
+      payload: editedLoad.payload,
     });
     setEditForm(false);
 
@@ -84,11 +88,11 @@ const NewLoadItemFull = props => {
 
         setLoad({
           ...newLoad,
-          title: receiveLoad.load.title,
-          width: receiveLoad.load.dimensions.width,
-          length: receiveLoad.load.dimensions.length,
-          height: receiveLoad.load.dimensions.height,
-          payload: receiveLoad.load.payload,
+          title: receiveLoad.title,
+          width: receiveLoad.dimensions.width,
+          length: receiveLoad.dimensions.length,
+          height: receiveLoad.dimensions.height,
+          payload: receiveLoad.payload,
         });
 
 

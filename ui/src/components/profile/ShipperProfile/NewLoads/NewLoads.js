@@ -33,7 +33,7 @@ const NewLoads = props => {
 
         setNewLoads([
           ...newLoads,
-          ...receivedNewLoads.foundNewLoads
+          ...receivedNewLoads
         ])
 
       } catch(e) {

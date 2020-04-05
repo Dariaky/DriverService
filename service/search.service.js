@@ -1,17 +1,71 @@
 const Truck = require('../models/Truck.model');
+const Load = require('../models/Load.model');
 const Driver = require('../models/Driver.model');
 
 
-const findTruck = ({_id, createdBy, assignedTo, status, logs, dimensions, payload}) => {
+const findTruck = async ({_id, createdBy, assignedTo, status, logs, dimensions, payload}) => {
 
-  // 1. Filter Truck DB - only truck with filled assignedTo field && truck with status IS- filteredArray
-  // To match = truck payload > load weight. truck dimensions > load size
-  // If there is such stuck - status changed from IS to OL. Load Status - ASSIGNED, state = En route to Pick Up.
-  // Appropriate info in logs - in load logs // {message: 'Load assigned', time: new Date().getTime().toString()}
+  try {
+    const trucksInService = await Truck.find({
+      status: 'IS',
+    });
 
+    // console.log('TRUCKS WITH IS: ', trucksInService);
+    if (trucksInService.length === 0) {
+      await Load.findOneAndUpdate(
+        {_id: _id},
+        {
+          status: 'NEW',
+        }
+      );
+      return 'No trucks in service right now. Please try again later';
+    }
 
+    const trucksMatched = trucksInService.filter(truck => {
+      return truck.payload > payload && truck.dimensions.width > dimensions.width &&
+      truck.dimensions.height > dimensions.height && truck.dimensions.length > dimensions.length
+    });
+
+    // console.log('TRUCKS MATCHES: ', trucksMatched);
+    if (trucksMatched.length === 0) {
+      await Load.findOneAndUpdate(
+        {_id: _id},
+        {
+          status: 'NEW',
+        }
+      );
+      return 'Your load is too big, no trucks found. Please edit parameters and try again';
+    }
+
+    const assignedTruck = await Truck.findOneAndUpdate(
+      {_id: trucksMatched[0]._id},
+      {
+        status: 'OL'
+      },
+      {new: true},
+    );
+
+    await Load.findOneAndUpdate(
+      {_id: _id},
+      {
+        status: 'ASSIGNED',
+        state: 'En route to Pick Up',
+        assignedTo: assignedTruck.assignedTo,
+        logs: [
+          ...logs,
+          {message: 'Load assigned', time: new Date().getTime().toString()}
+        ]
+      },
+      {new: true},
+    );
+
+    return 'Truck was found and load assigned!'
+
+  } catch (e) {
+    return `Impossible to find a truck:, ${e}`
+  }
 
 };
 
 
-export default findTruck;
+module.exports = findTruck;

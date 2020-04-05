@@ -5,6 +5,7 @@ import {useMessage} from '../../../../hooks/message.hook';
 import TruckItemShort from './TruckItem(short)/TruckItemShort';
 
 import './my-trucks.css';
+import DriverNav from '../DriverNav/DriverNav';
 
 
 const MyTrucks = props => {
@@ -33,7 +34,7 @@ const MyTrucks = props => {
 
         setMyTrucks([
           ...myTrucks,
-          ...trucks.foundTrucks
+          ...trucks
         ])
 
       } catch(e) {
@@ -47,6 +48,7 @@ const MyTrucks = props => {
   return (
 
     <div className="section__layout">
+      <DriverNav/>
       <h1 className="section__title">My Trucks</h1>
       {myTrucks.length !== 0 ? <ul className="trucks__list">
         {myTrucks.map(item => <TruckItemShort key={item._id} {...item}/>)}

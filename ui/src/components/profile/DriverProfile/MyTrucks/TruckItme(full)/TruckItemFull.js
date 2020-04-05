@@ -39,9 +39,9 @@ const TruckItemFull = props => {
 
         setTruck({
           ...truck,
-          model: receivedTruck.truck.model,
-          type: receivedTruck.truck.type,
-          assignedTo: receivedTruck.truck.assignedTo,
+          model: receivedTruck.model,
+          type: receivedTruck.type,
+          assignedTo: receivedTruck.assignedTo,
         });
 
 
@@ -60,14 +60,12 @@ const TruckItemFull = props => {
 
     setTruck({
       ...truck,
-      model: editedTruck.editedTruck.model,
-      type: editedTruck.editedTruck.type,
+      model: editedTruck.model,
+      type: editedTruck.type,
     });
     setEditForm(false);
 
   };
-
-
 
   const deleteTruckHandler = async () => {
     try {
@@ -96,7 +94,6 @@ const TruckItemFull = props => {
         'Content-Type': 'application/json',
         'Authorization': storeData.token
       });
-
 
       console.log("Truck was assigned!");
       history.push('/trucks/my-trucks');
