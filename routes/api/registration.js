@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {check, validationResult} = require('express-validator');
+const Joi = require('@hapi/joi');
 
 const Driver = require('../../models/Driver.model');
 const Shipper = require('../../models/Shipper.model');
@@ -10,32 +10,34 @@ const bcrypt = require('bcrypt');
 router
     .post(
         '/',
-        [
-          check('name', 'Invalid name').exists(),
-          check('email', 'Invalid email').isEmail(),
-          check('password', 'At least 3 characters').isLength({min: 3}),
-        ],
-        async (req, res) => {
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-            return res.status(400).json({
-              errors: errors.array(),
-              message: 'Invalid data for registration',
-            });
-          }
 
-          const {name, email, password, role} = req.body;
+        async (req, res) => {
+
+          const schema = Joi.object({
+            name: Joi.string()
+              .min(2)
+              .max(30)
+              .required(),
+            password: Joi.string()
+              .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+              .required(),
+            email: Joi.string()
+              .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+              .required(),
+            role: Joi.string()
+              .alphanum()
+              .required()
+          });
 
           try {
-            let userCandidate;
-            if (role === 'driver') {
-              userCandidate = await Driver.findOne({email});
-            } else {
-              userCandidate = await Shipper.findOne({email});
-            }
 
-            if (userCandidate) {
-              return res.status(400).json({message: 'Such user already exists'});
+            const {name, email, password, role} = await schema.validateAsync(req.body);
+
+            const driverCandidate = await Driver.findOne({email});
+            const shipperCandidate = await Shipper.findOne({email});
+
+            if (driverCandidate || shipperCandidate) {
+              return res.status(400).json({message: 'User with such email already exists'});
             }
 
             const hashedPassword = await bcrypt.hash(password, 12);
@@ -59,6 +61,7 @@ router
 
             await user.save();
             res.status(201).json({message: 'User was created'});
+
           } catch (err) {
             res.status(500).json({message: err.message});
           }

@@ -30,7 +30,7 @@ const DeleteAccount = props => {
     try {
       const storeData = JSON.parse(localStorage.getItem(storageName));
 
-      await request(`/profile/${storeData.userId}/delete-account`, 'DELETE', {...form, role: storeData.role}, {
+      await request(`/profile/${storeData.userId}/delete-account`, 'DELETE', {...form}, {
         'Content-Type': 'application/json',
         'Authorization': storeData.token
       });

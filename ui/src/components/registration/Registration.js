@@ -33,10 +33,10 @@ const Registration = props => {
 
     try {
       const data = await request('/registration', 'POST', {...form});
-      console.log(data);
+      console.log(data.message);
       history.push('/login');
     } catch(e) {
-
+      console.log('Something went wrong. Please try again!');
     }
   };
 

@@ -14,10 +14,10 @@ const CreateLoad = props => {
 
   const [form, setForm] = useState({
     title: '',
-    width: '',
-    length: '',
-    height: '',
-    payload: '',
+    width: 0,
+    length: 0,
+    height: 0,
+    payload: 0,
   });
 
   useEffect(() => {
@@ -30,9 +30,11 @@ const CreateLoad = props => {
   const createLoadHandler = async (e) => {
     e.preventDefault();
 
+
     try {
       const storeData = JSON.parse(localStorage.getItem(storageName));
 
+      console.log("FROM: ", form);
       await request(`/loads/create-load`, 'POST', {...form, userId: storeData.userId}, {
         'Content-Type': 'application/json',
         'Authorization': storeData.token
@@ -47,10 +49,11 @@ const CreateLoad = props => {
   };
 
   const changeHandler = (event) => {
+
     setForm({
       ...form,
-      [event.target.name]: event.target.value
-    })
+      [event.target.name]: event.target.type === 'number' ? parseInt(event.target.value) : event.target.value
+    });
   };
 
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Joi = require('@hapi/joi');
 
 const Load = require('../../models/Load.model');
 
@@ -38,31 +39,50 @@ router
 
 // /loads/create-load
     .post('/create-load', async (req, res) => {
-    // form validation
+
+      const schema = Joi.object({
+        title: Joi.string()
+          .min(2)
+          .max(30)
+          .required(),
+        width: Joi.number()
+          .required(),
+        length: Joi.number()
+          .required(),
+        height: Joi.number()
+          .required(),
+        payload: Joi.number()
+          .required(),
+        userId: Joi.string()
+          .alphanum()
+          .required(),
+      });
 
       try {
+
+        const {title, width, length, height, payload, userId} = await schema.validateAsync(req.body);
+
         const newLoad = await new Load({
-          title: req.body.title,
-          createdBy: req.body.userId,
+          title,
+          createdBy: userId,
           assignedTo: '',
           logs: [{message: 'Load created', time: new Date().getTime().toString()}],
           status: 'NEW',
           state: '',
           dimensions: {
-            width: req.body.width,
-            length: req.body.length,
-            height: req.body.height,
+            width,
+            length,
+            height,
           },
-          payload: req.body.payload,
+          payload,
         });
 
         await newLoad.save();
-        res.status(201).json({message: 'New Load was created'});
+        res.status(201).json({status: 'Load was created!'});
       } catch (e) {
         res.status(500).json({status: e.message});
       }
     })
-
     .get('/:id', async (req, res) => {
       try {
         const load = await Load.findOne({
@@ -89,17 +109,38 @@ router
     })
 
     .put('/:id', async (req, res) => {
-        try {
+
+      const schema = Joi.object({
+        title: Joi.string()
+          .min(2)
+          .max(30)
+          .required(),
+        width: Joi.number()
+          .required(),
+        length: Joi.number()
+          .required(),
+        height: Joi.number()
+          .required(),
+        payload: Joi.number()
+          .required(),
+      });
+
+
+      try {
+
+        const {title, width, length, height, payload} = await schema.validateAsync(req.body);
+
+        console.log('WIDTH FROM VALIDATION:', typeof width);
           const editedLoad = await Load.findOneAndUpdate(
             {_id: req.params.id},
             {
-              title: req.body.title,
+              title,
               dimensions: {
-                width: req.body.width,
-                length: req.body.length,
-                height: req.body.height
+                width,
+                length,
+                height
               },
-              payload: req.body.payload
+              payload
             },
             {new: true},
           );

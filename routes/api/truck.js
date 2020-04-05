@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Joi = require('@hapi/joi');
 const contants = require('../../constants/pre-defined-trucks');
 
 const Load = require('../../models/Load.model');
@@ -33,25 +34,38 @@ router
       }
 
     })
-
-
     .post('/create-truck', async (req, res) => {
+
+      const schema = Joi.object({
+        model: Joi.string()
+          .min(2)
+          .max(30)
+          .required(),
+        type: Joi.string()
+          .alphanum()
+          .required(),
+        userId: Joi.string()
+          .alphanum()
+          .required(),
+      });
 
       try {
 
+        const {model, type, userId} = await schema.validateAsync(req.body);
+
         let parameters;
-        if (req.body.type === 'sprinter') {
+        if (type === 'sprinter') {
           parameters = contants.SPRINTER;
-        } else if (req.body.type === 'small') {
+        } else if (type === 'small') {
           parameters = contants.SMALL_STRAIGHT;
-        } else if (req.body.type === 'large') {
+        } else if (type === 'large') {
           parameters = contants.LARGE_STRAIGHT;
         }
 
         const newTruck = await new Truck({
-          model: req.body.model,
-          type: req.body.type,
-          createdBy: req.body.userId,
+          model,
+          type,
+          createdBy: userId,
           assignedTo: '',
           status: '', // IS OL
           ...parameters
@@ -99,8 +113,20 @@ router
 
 
   .put('/:id', async (req, res) => {
-    try {
 
+    const schema = Joi.object({
+      model: Joi.string()
+        .min(2)
+        .max(30)
+        .required(),
+      type: Joi.string()
+        .alphanum()
+        .required(),
+    });
+
+
+    try {
+      const {model, type} = await schema.validateAsync(req.body);
       const truck = await Truck.findOne({ _id: req.params.id });
 
       if(truck.assignedTo !== '') {
@@ -108,19 +134,19 @@ router
       }
 
       let parameters;
-      if (req.body.type === 'sprinter') {
+      if (type === 'sprinter') {
         parameters = contants.SPRINTER;
-      } else if (req.body.type === 'small') {
+      } else if (type === 'small') {
         parameters = contants.SMALL_STRAIGHT;
-      } else if (req.body.type === 'large') {
+      } else if (type === 'large') {
         parameters = contants.LARGE_STRAIGHT;
       }
 
       const editedTruck = await Truck.findOneAndUpdate(
         {_id: req.params.id},
         {
-         model: req.body.model,
-         type: req.body.type,
+         model,
+         type,
          ...parameters
         },
         {new: true},

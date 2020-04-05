@@ -25,7 +25,7 @@ const EditTruck = ({model, type, onEditedTruck})=> {
   const changeHandler = (event) => {
     setEditForm({
       ...editFrom,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.type === 'number' ? parseInt(event.target.value) : event.target.value
     })
   };
 

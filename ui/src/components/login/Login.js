@@ -38,7 +38,7 @@ const Login = props => {
       authorization.login(data.jwtToken, data.userId, data.role);
       history.push(`/profile/${data.userId}`);
     } catch(e) {
-        console.log('Data was not received', e)
+
     }
   };
 

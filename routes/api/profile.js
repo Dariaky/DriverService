@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const Joi = require('@hapi/joi');
 
 const Driver = require('../../models/Driver.model');
 const Shipper = require('../../models/Shipper.model');
@@ -34,10 +35,20 @@ router
     })
 
     .put('/:id/change-password', async (req, res) => {
-      // oldPassword
-      // newPassword
-      const hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
+
+      const schema = Joi.object({
+        oldPassword: Joi.string()
+          .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        newPassword: Joi.ref('oldPassword'),
+        role: Joi.string()
+      });
+
       try {
+
+        const {newPassword} = await schema.validateAsync(req.body);
+
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+
         if (req.body.role === 'driver') {
           await Driver.findOneAndUpdate(
               {_id: req.params.id},
@@ -59,10 +70,20 @@ router
     })
 
     .delete('/:id/delete-account', async (req, res) => {
+
+      const schema = Joi.object({
+        email: Joi.string()
+          .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+          .required(),
+      });
+
       try {
+
+        const {email} = await schema.validateAsync(req.body);
+
         await Shipper.findOneAndRemove({
           _id: req.params.id,
-          email: req.body.email,
+          email,
         });
         res.status(200).json({status: 'User was deleted!'});
       } catch (err) {
@@ -70,12 +91,5 @@ router
       }
     });
 
-
-// FOR SHIPPERS:
-// GET '/:id/newly-create' to see all new loads ()
-// GET '/:id/posted-loads' to see all in progress
-// GET '/:id/loads-history' to see all user loads
-
-// FOR DRIVER:
 
 module.exports = router;

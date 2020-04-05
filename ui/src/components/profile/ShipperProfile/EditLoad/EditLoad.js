@@ -28,19 +28,22 @@ const EditLoad = ({title, width, length, height, payload, onEditedLoad})=> {
   const changeHandler = (event) => {
     setEditForm({
       ...editFrom,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.type === 'number' ? parseInt(event.target.value) : event.target.value
     })
   };
 
   const createLoadHandler = async(event) => {
     event.preventDefault();
+    try {
+      const editedLoad = await request(`${pathname}`, 'PUT', {...editFrom}, {
+        'Content-Type': 'application/json',
+        'Authorization': storeData.token
+      });
 
-    const editedLoad = await request(`${pathname}`, 'PUT', {...editFrom}, {
-      'Content-Type': 'application/json',
-      'Authorization': storeData.token
-    });
-
-    onEditedLoad(editedLoad);
+      onEditedLoad(editedLoad);
+    } catch(e) {
+      console.log('Error', e);
+    }
 
   };
 

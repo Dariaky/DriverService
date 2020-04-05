@@ -45,7 +45,7 @@ const CreateTruck = props => {
   const changeHandler = (event) => {
     setForm({
       ...form,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.type === 'number' ? parseInt(event.target.value) : event.target.value
     })
   };
 

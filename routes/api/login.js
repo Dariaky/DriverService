@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {check, validationResult} = require('express-validator');
+const Joi = require('@hapi/joi');
 
 const Driver = require('../../models/Driver.model');
 const Shipper = require('../../models/Shipper.model');
@@ -13,21 +13,23 @@ const bcrypt = require('bcrypt');
 router
     .post(
         '/',
-        [
-          check('email', 'Invalid email').isEmail(),
-          check('password', 'At least 3 characters').isLength({min: 3}),
-        ],
-        async (req, res) => {
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-            return res.status(400).json({
-              errors: errors.array(),
-              message: 'Invalid data for login',
-            });
-          }
 
-          const {email, password, role} = req.body;
+        async (req, res) => {
+          const schema = Joi.object({
+            email: Joi.string()
+              .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+              .required(),
+            password: Joi.string()
+              .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+              .required(),
+            role: Joi.string()
+              .alphanum()
+              .required()
+          });
+
           try {
+            const {email, password, role} = await schema.validateAsync(req.body);
+
             let user;
             if (role === 'driver') {
               user = await Driver.findOne({email});
