@@ -27,8 +27,15 @@ You will be redirected to http://localhost:8081/.
 - View created loads;
 - Update loads with status ‘NEW';
 - Delete loads with status 'NEW';
-- Post a load;
-- View shipping info;
+- Post a load;**
+- View shipping info.***
+
+** Don't forget to use console to see what is going on. If the truck is found,
+the load appears in the shipment section. 
+
+*** Don't forget to re-fresh your page to see any updates regarding the load state.
+When the driver delivers the load, it will be automatically placed to the history 
+section.
 
 ### Features implemented for drivers only:
 - Add trucks;
@@ -37,13 +44,13 @@ You will be redirected to http://localhost:8081/.
 - Update not assigned to the driver trucks info;
 - Delete not assigned to the driver trucks;
 - View assigned to the driver load;
-- Interact with assigned loads (pick up and deliver)**. 
+- Interact with assigned loads (pick up and deliver).** 
 
 N.B. Driver cannot edit or delete truck assigned to him. 
 Likewise driver is not able to reassign from the current truck or assign
 another one in case he/she has loads to deliver.  
 
-**To see how load changes its state, please, re-fresh the page.
+** To see how load changes its state, please, re-fresh the page.
 
 P.S. Use console to follow what is going on right now.
 
