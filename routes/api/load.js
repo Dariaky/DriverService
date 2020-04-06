@@ -43,6 +43,24 @@ router
         res.status(500).json({message: e.message});
       }
     })
+    /**
+     * @api {get} /loads/history
+     * @apiDescription Api provides shipper with an Array of his/her
+     * loads with status 'SHIPPED'.
+     *
+     */
+    .get('/history', async (req, res) => {
+      try {
+        const foundLoads = await Load.find({
+          createdBy: req.headers['userid'],
+          status: 'SHIPPED',
+        });
+
+        res.status(200).json(foundLoads);
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
 
     /**
      * @api {post} /loads/create-load

@@ -50,7 +50,7 @@ const TruckItemFull = props => {
       }
     }
     fetchData();
-  }, [pathname, request, storeData.token, truck]);
+  }, []);
 
   const editTruckHandler = () => {
     setEditForm(!editForm);

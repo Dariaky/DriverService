@@ -16,6 +16,9 @@ const ShipperNav = props => {
         <li className="nav-menu__item">
           <Link to={`/loads/shipments`} className="nav-menu__link">Shipments</Link>
         </li>
+        <li className="nav-menu__item">
+          <Link to={`/loads/history`} className="nav-menu__link">History</Link>
+        </li>
       </ul>
     </nav>
   );

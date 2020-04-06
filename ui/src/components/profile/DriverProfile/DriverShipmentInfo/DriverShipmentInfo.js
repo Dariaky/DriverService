@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import DriverNav from '../DriverNav/DriverNav';
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
+import DriverShipmentItem from './ShipmentItem/DriverShipmentItem';
+
+import './driver-shipments.css';
 
 const DriverShipmentInfo = props => {
 
@@ -37,7 +40,7 @@ const DriverShipmentInfo = props => {
       }
     }
     fetchData();
-  }, [request, shipments]);
+  }, []);
 
 
   return (
@@ -45,13 +48,8 @@ const DriverShipmentInfo = props => {
       <DriverNav/>
       <h1 className="section__title">Shipment Info</h1>
 
-        {shipments.length !== 0 ? <ul className="driver-shipments__list">
-          {shipments.map(shipment =>
-            <li className="driver-shipments__item">
-            <h4>Load Title: {shipment.title}</h4>
-            <div>Load state: {shipment.state}</div>
-          </li>
-          )}
+        {shipments.length !== 0 ? <ul className="shipments__list">
+          {shipments.map(shipment => <DriverShipmentItem key={shipment._id} {...shipment}/>)}
         </ul> : <p className="driver-shipments__no-items">Yet no assigned loads:(</p> }
 
     </div>

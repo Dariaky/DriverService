@@ -37,10 +37,15 @@ You will be redirected to http://localhost:8081/.
 - Update not assigned to the driver trucks info;
 - Delete not assigned to the driver trucks;
 - View assigned to the driver load;
+- Interact with assigned loads (pick up and deliver)**. 
 
 N.B. Driver cannot edit or delete truck assigned to him. 
 Likewise driver is not able to reassign from the current truck or assign
 another one in case he/she has loads to deliver.  
+
+**To see how load changes its state, please, re-fresh the page.
+
+P.S. Use console to follow what is going on right now.
 
 ### Available drivers:
 
@@ -58,5 +63,7 @@ another one in case he/she has loads to deliver.
 | Sam2      | 222        | sam2@email.com    |
 | Sam3      | 333        | sam3@email.com    |
 
+For your convenience use tom1 and sam1 user accounts to test 
+load delivery cases with loads and trucks created beforehand. 
 
 #### You are more than welcome to create your own users and test functionality available depending on their roles. Enjoy:)

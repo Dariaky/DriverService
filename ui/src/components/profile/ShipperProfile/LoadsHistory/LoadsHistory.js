@@ -1,19 +1,17 @@
 import React, {useEffect, useState} from 'react';
-
+import ShipperNav from '../ShipperNav/ShipperNav';
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
-import NewLoadItem from './NewLoadItem(short)/NewLoadItem';
-import ShipperNav from '../ShipperNav/ShipperNav';
+import LoadHistoryItem from './LoadsHistoryItem/LoadsHistoryItem';
 
-import './new-loads.css';
 
-const NewLoads = props => {
+const LoadsHistory = props => {
 
   const storageName = 'userData';
   const {request, error, clearError} = useHttp();
   const message = useMessage();
 
-  const [newLoads, setNewLoads] = useState([]);
+  const [shippedLoads, setShippedLoads] = useState([]);
 
   useEffect(() => {
     message(error);
@@ -25,15 +23,15 @@ const NewLoads = props => {
       try {
         const storeData = JSON.parse(localStorage.getItem(storageName));
 
-        const receivedNewLoads = await request(`/loads/new-loads`, 'GET', null, {
+        const receivedLoads = await request(`/loads/history`, 'GET', null, {
           'Content-Type': 'application/json',
           'Authorization': storeData.token,
           'UserId': storeData.userId
         });
 
-        setNewLoads([
-          ...newLoads,
-          ...receivedNewLoads
+        setShippedLoads([
+          ...shippedLoads,
+          ...receivedLoads
         ])
 
       } catch(e) {
@@ -44,16 +42,17 @@ const NewLoads = props => {
   }, []);
 
 
-  return (
-          <div className="section__layout">
-            <ShipperNav/>
-            <h1 className="section__title">My New Loads</h1>
-            {newLoads.length !== 0 ? <ul className="new-loads__list">
-              {newLoads.map(item => <NewLoadItem key={item._id} {...item}/>)}
-            </ul> : <p className="new-loads__no-items">Yet no new loads:(</p> }
 
-          </div>
+
+  return (
+    <div className="section__layout">
+      <ShipperNav/>
+      <h1 className="section__title">History</h1>
+      {shippedLoads.length !== 0 ? <ul className="shipments__list">
+        {shippedLoads.map(item => <LoadHistoryItem key={item._id} {...item}/>)}
+      </ul> : <p className="shipments__no-items">History is empty</p> }
+    </div>
   );
 };
 
-export default NewLoads;
+export default LoadsHistory;

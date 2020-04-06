@@ -101,7 +101,7 @@ const NewLoadItemFull = props => {
       }
     }
     fetchData();
-  }, [newLoad, pathname, request, storeData.token]);
+  }, []);
 
 
 

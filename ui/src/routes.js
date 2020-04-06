@@ -24,6 +24,10 @@ import TruckItemFull
   from './components/profile/DriverProfile/MyTrucks/TruckItme(full)/TruckItemFull';
 import DriverShipmentInfo
   from './components/profile/DriverProfile/DriverShipmentInfo/DriverShipmentInfo';
+import LoadsHistory
+  from './components/profile/ShipperProfile/LoadsHistory/LoadsHistory';
+import DeliveryHistory
+  from './components/profile/DriverProfile/DeliveryHistory/DeliveryHistory';
 
 
 const useRoutes = (isAuthenticated, userId, userRole) => {
@@ -53,11 +57,13 @@ const useRoutes = (isAuthenticated, userId, userRole) => {
         <Route path={`/loads/create-load`} exact component={CreateLoad}/>
         <Route path={`/loads/new-loads`} exact component={NewLoads}/>
         <Route path={`/loads/shipments`} exact component={ShipperShipmentInfo}/>
+        <Route path={`/loads/history`} exact component={LoadsHistory}/>
         <Route path={`/loads/:id`} exact component={NewLoadItemFull}/>
 
         <Route path={`/trucks/create-truck`} exact component={CreateTruck}/>
         <Route path={`/trucks/my-trucks`} exact component={MyTrucks}/>
         <Route path={`/trucks/shipments`} exact component={DriverShipmentInfo}/>
+        <Route path={`/trucks/history`} exact component={DeliveryHistory}/>
         <Route path={`/trucks/:id`} exact component={TruckItemFull}/>
 
         <Route path="/" exact component={Main} />

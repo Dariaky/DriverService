@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import ShipperNav from '../ShipperNav/ShipperNav';
 import {useHttp} from '../../../../hooks/http.hook';
 import {useMessage} from '../../../../hooks/message.hook';
+import ShipmentItem from './ShipmentItem/ShipmentItem';
 
+import './shipper-shipments.css';
 
 const ShipperShipmentInfo = props => {
 
@@ -38,7 +40,7 @@ const ShipperShipmentInfo = props => {
       }
     }
     fetchData();
-  }, [assignedLoads, request]);
+  }, []);
 
 
 
@@ -47,9 +49,9 @@ const ShipperShipmentInfo = props => {
     <div className="section__layout">
       <ShipperNav/>
       <h1 className="section__title">Shipment Info</h1>
-      {assignedLoads.length !== 0 ? <ul className="new-loads__list">
-        {assignedLoads.map(item => <li>{item.title}: {item.state}</li>)}
-      </ul> : <p className="new-loads__no-items">Yet no assigned loads:(</p> }
+      {assignedLoads.length !== 0 ? <ul className="shipments__list">
+        {assignedLoads.map(item => <ShipmentItem key={item._id} {...item}/>)}
+      </ul> : <p className="shipments__no-items">Yet no assigned loads:(</p> }
     </div>
   );
 };

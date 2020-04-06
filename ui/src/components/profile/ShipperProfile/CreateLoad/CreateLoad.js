@@ -34,7 +34,6 @@ const CreateLoad = props => {
     try {
       const storeData = JSON.parse(localStorage.getItem(storageName));
 
-      console.log("FROM: ", form);
       await request(`/loads/create-load`, 'POST', {...form, userId: storeData.userId}, {
         'Content-Type': 'application/json',
         'Authorization': storeData.token

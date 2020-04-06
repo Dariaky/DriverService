@@ -33,6 +33,24 @@ router
       try {
         const foundShipments = await Load.find({
           assignedTo: req.headers['userid'],
+          status: 'ASSIGNED',
+        });
+
+        res.status(200).json(foundShipments);
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+    /**
+     * @api {get} /trucks/history
+     * @apiDescription Api provides driver with an Array of loads
+     * him/her delivered.
+     */
+    .get('/history', async (req, res) => {
+      try {
+        const foundShipments = await Load.find({
+          assignedTo: req.headers['userid'],
+          status: 'SHIPPED',
         });
 
         res.status(200).json(foundShipments);
@@ -244,6 +262,62 @@ router
         );
 
         return res.status(200).json({message: 'Truck was reassigned'});
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+
+    .patch('/shipments/pick-up', async (req, res) => {
+      try {
+        const pickedUpLoad = await Load.findOneAndUpdate(
+            {_id: req.body.loadId},
+            {
+              state: 'En route to delivery',
+              logs: [
+                ...req.body.logs,
+                {
+                  message: 'Load picked up', time: new Date()
+                      .getTime()
+                      .toString(),
+                },
+              ],
+            },
+            {new: true},
+        );
+        console.log('Picked UP Load: ', pickedUpLoad);
+        res.status(200).json(pickedUpLoad);
+      } catch (e) {
+        res.status(500).json({message: e.message});
+      }
+    })
+    .patch('/shipments/delivered', async (req, res) => {
+      try {
+        await Truck.findOneAndUpdate(
+            {
+              assignedTo: req.body.userId,
+              status: 'OL',
+            },
+            {
+              status: 'IS',
+            },
+        );
+
+        await Load.findOneAndUpdate(
+            {_id: req.body.loadId},
+            {
+              state: 'Arrived to delivery',
+              status: 'SHIPPED',
+              logs: [
+                ...req.body.logs,
+                {
+                  message: 'Load delivered', time: new Date()
+                      .getTime()
+                      .toString(),
+                },
+              ],
+            });
+
+        res.status(200).json({message: 'Truck delivered the load'});
       } catch (e) {
         res.status(500).json({message: e.message});
       }
