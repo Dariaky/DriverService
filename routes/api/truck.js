@@ -204,7 +204,11 @@ router
      */
     .patch('/:id/assign', async (req, res) => {
       try {
-        const anyAssigned = await Truck.findOne( {status: 'OL'} );
+        const anyAssigned = await Truck.findOne(
+            {
+              _id: req.params.id,
+              status: 'OL',
+            });
 
         if (anyAssigned) {
           return res.status(400).json(
@@ -256,7 +260,7 @@ router
             {_id: req.params.id},
             {
               assignedTo: '',
-              status: 'IS',
+              status: '',
             },
             {new: true},
         );
@@ -266,7 +270,12 @@ router
         res.status(500).json({message: e.message});
       }
     })
-
+    /**
+     * @api {patch} /shipments/pick-up
+     * @apiDescription Api provides possibility for driver to pick up a load.
+     * With this load state will be changed and proper log created.
+     *
+     */
     .patch('/shipments/pick-up', async (req, res) => {
       try {
         const pickedUpLoad = await Load.findOneAndUpdate(
@@ -290,6 +299,13 @@ router
         res.status(500).json({message: e.message});
       }
     })
+    /**
+     * @api {patch} /shipments/delivered
+     * @apiDescription Api provides possibility for driver to end up delivery.
+     * With this load status will be changed to SHIPPED and driver will be
+     * free to go.
+     *
+     */
     .patch('/shipments/delivered', async (req, res) => {
       try {
         await Truck.findOneAndUpdate(
