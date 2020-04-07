@@ -1,13 +1,11 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const {Schema, model} = require('mongoose');
 
 const ShipperSchema = new Schema({
-  name: String,
-  email: String,
-  password: String,
-  role: String,
-  loads: Array,
+  name: {type: String, required: true},
+  email: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
+  role: {type: String, required: true},
 });
 
 
-module.exports = mongoose.model('Shipper', ShipperSchema);
+module.exports = model('Shipper', ShipperSchema);

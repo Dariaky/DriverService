@@ -1,19 +1,14 @@
 const authorizationService = require('../../service/auth.service');
 
-const verifyToken = (req, res, next) => {
-  // 1. GET TOKEN FROM REQ
-  const jwtToken = req.body.token;
+const verifyToken = async (req, res, next) => {
+  try {
+    const jwtToken = req.headers['authorization'];
 
-  if (jwtToken) {
-    authorizationService.verifyToken(jwtToken);
-
-    req.token = jwtToken; // writing token into request object
+    const tokenVerified = await authorizationService.verifyToken(jwtToken);
+    req.token = tokenVerified; // writing token into request object
     next();
-  } else {
-    return res.json({
-      success: false,
-      message: 'Authorization token is not supplied',
-    });
+  } catch (err) {
+    res.status(500).json({status: err.message});
   }
 };
 

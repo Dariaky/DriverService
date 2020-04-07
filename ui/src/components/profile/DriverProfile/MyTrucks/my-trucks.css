@@ -1,0 +1,48 @@
+.trucks__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.trucks__item {
+    padding: 1em 4em;
+    border: 3px solid #006f6f;
+    margin: 1em 2em;
+    box-shadow: 2px 2px 8px #005151;
+    text-align: center;
+    width: 40em;
+    background-color: #ffffff;
+}
+
+.trucks__item-title {
+    padding: 1em 0;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+
+.trucks__item-button {
+    cursor: pointer;
+    padding: 1em 2em;
+    background-color: #006f6f;
+    border: 0;
+    color: #ffffff;
+    outline: none;
+    font-weight: 700;
+}
+
+.trucks__item-button:hover {
+    background-color: #005151;
+}
+
+.trucks__no-items {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.isAssigned {
+    background-color: #064a4a;
+    color: white;
+}
+
