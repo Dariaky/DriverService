@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require('@hapi/joi');
-const contants = require('../../constants/pre-defined-trucks');
+const constants = require('../../constants/pre-defined-trucks');
 
 const Load = require('../../models/Load.model');
 const Truck = require('../../models/Truck.model');
@@ -82,11 +82,11 @@ router
 
         let parameters;
         if (type === 'sprinter') {
-          parameters = contants.SPRINTER;
+          parameters = constants.SPRINTER;
         } else if (type === 'small') {
-          parameters = contants.SMALL_STRAIGHT;
+          parameters = constants.SMALL_STRAIGHT;
         } else if (type === 'large') {
-          parameters = contants.LARGE_STRAIGHT;
+          parameters = constants.LARGE_STRAIGHT;
         }
 
         const newTruck = await new Truck({
@@ -171,11 +171,11 @@ router
 
         let parameters;
         if (type === 'sprinter') {
-          parameters = contants.SPRINTER;
+          parameters = constants.SPRINTER;
         } else if (type === 'small') {
-          parameters = contants.SMALL_STRAIGHT;
+          parameters = constants.SMALL_STRAIGHT;
         } else if (type === 'large') {
-          parameters = contants.LARGE_STRAIGHT;
+          parameters = constants.LARGE_STRAIGHT;
         }
 
         const editedTruck = await Truck.findOneAndUpdate(
@@ -206,7 +206,7 @@ router
       try {
         const anyAssigned = await Truck.findOne(
             {
-              _id: req.params.id,
+              createdBy: req.body.userId,
               status: 'OL',
             });
 

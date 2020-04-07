@@ -70,7 +70,4 @@ P.S. Use console to follow what is going on right now.
 | Sam2      | 222        | sam2@email.com    |
 | Sam3      | 333        | sam3@email.com    |
 
-For your convenience use tom1 and sam1 user accounts to test 
-load delivery cases with loads and trucks created beforehand. 
-
 #### You are more than welcome to create your own users and test functionality available depending on their roles. Enjoy:)
